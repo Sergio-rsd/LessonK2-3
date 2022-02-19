@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<style name="NameWeather">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_weight">1</item>
-</style>
+
+    <style name="NameWeather">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
     <style name="NameWeather.Right">
         <item name="android:gravity">right</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LineWeather">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="LineWeather.Dark">
+        <item name="android:background">@color/lineBackgroundDark</item>
+    </style>
+    <style name="LineWeather.Light">
+        <item name="android:background">@color/lineBackgroundLight</item>
     </style>
 </resources>

@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.gb.kotlinapp.R
-import ru.gb.kotlinapp.databinding.FragmentDetailsBinding
+import ru.gb.kotlinapp.databinding.FragmentWeatherCityBinding
 import ru.gb.kotlinapp.model.Weather
 
 class DetailsFragment : Fragment() {
-    private var _binding: FragmentDetailsBinding? = null
+    private var _binding: FragmentWeatherCityBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -18,7 +18,7 @@ class DetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentWeatherCityBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,14 +30,26 @@ class DetailsFragment : Fragment() {
         if (weather != null) {
             val city = weather.city
             binding.cityName.text = city.city
-
-            binding.cityCoordinates.text = String.format(
-                getString(R.string.city_coordinates),
-                city.lat.toString(),
-                city.lon.toString()
+            binding.timeAfterLastUpdate.text = String.format(
+                getString(R.string.time_after_last_update),
+                "",
+                ""
             )
-            binding.temperatureValue.text = weather.temperature.toString()
-            binding.feelsLikeValue.text = weather.feelsLike.toString()
+            binding.currentTimeData.text = String.format(
+                getString(R.string.current_time_data),
+                "",
+                "",
+                ""
+            )
+            binding.temperatureValue.text = String.format(
+                getString(R.string.current_weather_value),
+                plusMinusTemperature(weather.temperature),
+                ""
+            )
+            binding.feelsLikeValue.text = String.format(
+                getString(R.string.feels_like_label_value),
+                plusMinusTemperature(weather.feelsLike)
+            )
         }
     }
 
@@ -45,7 +57,6 @@ class DetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
     companion object {
         const val BUNDLE_EXTRA = "weather"
@@ -55,5 +66,9 @@ class DetailsFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    private fun plusMinusTemperature(temp: Int): String {
+        return if (temp > 0) "+$temp" else temp.toString()
     }
 }
