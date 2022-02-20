@@ -10,4 +10,8 @@
 
     <color name="loadingBackground">#80FFFFFF</color>
     <color name="fragmentBackground">#FFFFFF</color>
+
+    <color name="lineBackgroundDark">#57A7A4A4</color>
+    <color name="lineBackgroundLight">#79EDEDEB</color>
+
 </resources>
