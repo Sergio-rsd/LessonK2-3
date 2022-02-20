@@ -81,5 +81,4 @@ fun getRussianCities(): List<Weather> {
         ),
 
         )
-
 }
