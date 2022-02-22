@@ -46,9 +46,6 @@ class MainFragmentAdapter (private var onItemViewClickListener: OnItemViewClickL
         holder.bind(weatherData[position])
     }
 
-    override fun getItemCount(): Int {
-         return weatherData.size
-    }
-
+    override fun getItemCount()= weatherData.size
 
 }
