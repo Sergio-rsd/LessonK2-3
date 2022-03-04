@@ -40,7 +40,6 @@ class MainFragment : Fragment() {
                     .commitAllowingStateLoss()
             }
         }
-
     })
 
     override fun onCreateView(
@@ -106,7 +105,6 @@ class MainFragment : Fragment() {
                     }
                     .show()
             }
-
         }
     }
 }

@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = MainActivityBinding.inflate(layoutInflater)
-        val view = binding.getRoot()
+        val view = binding.root
         setContentView(view)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
