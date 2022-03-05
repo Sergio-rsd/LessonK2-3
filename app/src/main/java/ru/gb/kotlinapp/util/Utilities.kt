@@ -9,3 +9,6 @@ fun longitudeSunDay(sunrise: String, sunset: String): String {
     val minute = duration.toMinutes() % 60
     return String.format("%02d:%02d", hour, minute)
 }
+fun plusMinusTemperature(temp: Int): String {
+    return if (temp > 0) "+$temp" else temp.toString()
+}
