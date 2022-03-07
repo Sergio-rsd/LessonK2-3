@@ -24,7 +24,7 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentWeatherCityBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,19 +33,19 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.timeAfterLastUpdate.text = String.format(
-            getString(R.string.time_after_last_update),
-            "",
-            ""
-        )
-        binding.currentTimeData.text = String.format(
-            getString(R.string.current_time_data),
-            SimpleDateFormat("HH:mm, EEEE, d MMMM").format(Calendar.getInstance().time)
-        )
         arguments?.getParcelable<Weather>(BUNDLE_EXTRA)?.let {
-            it.city.also {
-                binding.cityName.text = it.city
+            it.city.also { city ->
+                binding.cityName.text = city.city
             }
+            binding.timeAfterLastUpdate.text = String.format(
+                getString(R.string.time_after_last_update),
+                "",
+                ""
+            )
+            binding.currentTimeData.text = String.format(
+                getString(R.string.current_time_data),
+                SimpleDateFormat("HH:mm, EEEE, d MMMM").format(Calendar.getInstance().time)
+            )
             binding.temperatureValue.text = String.format(
                 getString(R.string.current_weather_value),
                 plusMinusTemperature(it.temperature),
@@ -118,9 +118,4 @@ class DetailsFragment : Fragment() {
             return fragment
         }
     }
-
-//    private fun plusMinusTemperature(temp: Int): String {
-//        return if (temp > 0) "+$temp" else temp.toString()
-//    }
-
 }

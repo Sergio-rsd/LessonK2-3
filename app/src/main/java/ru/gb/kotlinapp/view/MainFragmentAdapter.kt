@@ -1,5 +1,6 @@
 package ru.gb.kotlinapp.view
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ class MainFragmentAdapter(private var onItemViewClickListener: OnItemViewClickLi
 
     private var weatherData: List<Weather> = listOf()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setWeather(data: List<Weather>) {
         weatherData = data
         notifyDataSetChanged()
