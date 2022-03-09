@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.MainFragmentBinding
 import ru.gb.kotlinapp.model.Weather
+import ru.gb.kotlinapp.util.showSnackBar
+import ru.gb.kotlinapp.util.showSnackBarNoAction
+import ru.gb.kotlinapp.util.showSnackBarStringText
 import ru.gb.kotlinapp.view.details.DetailsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.MainViewModel
@@ -96,14 +98,5 @@ class MainFragment : Fragment() {
                 )
             }
         }
-    }
-
-    private fun View.showSnackBar(
-        text: String,
-        actionText: String,
-        action: (View) -> Unit,
-        length: Int = Snackbar.LENGTH_INDEFINITE
-    ) {
-        Snackbar.make(this, text, length).setAction(actionText, action).show()
     }
 }
