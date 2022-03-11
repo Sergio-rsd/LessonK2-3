@@ -37,6 +37,61 @@ class DetailsFragment : Fragment() {
             it.city.also { city ->
                 binding.cityName.text = city.city
             }
+            with(binding){
+                timeAfterLastUpdate.text = String.format(
+                    getString(R.string.time_after_last_update),
+                    "",
+                    ""
+                )
+                currentTimeData.text = String.format(
+                    getString(R.string.current_time_data),
+                    SimpleDateFormat("HH:mm, EEEE, d MMMM").format(Calendar.getInstance().time)
+                )
+                temperatureValue.text = String.format(
+                    getString(R.string.current_weather_value),
+                    plusMinusTemperature(it.temperature),
+                    it.weatherCondition
+                )
+                feelsLikeValue.text = String.format(
+                    getString(R.string.feels_like_label_value),
+                    plusMinusTemperature(it.feelsLike)
+                )
+                precipitationStrengthValue.text = String.format(
+                    getString(R.string.precipitation_strength_value),
+                    it.precipitationStrength.toString()
+                )
+                pressureMmValue.text = String.format(
+                    getString(R.string.pressure_mm_value),
+                    it.pressure.toString(),
+                    it.pressureNormal.toString()
+                )
+                humidityValue.text = String.format(
+                    getString(R.string.humidity_value),
+                    it.humidity.toString(),
+                    '%'
+                )
+                windValue.text = String.format(
+                    getString(R.string.wind_value),
+                    it.wind.toString(),
+                    it.windDirection
+                )
+                cloudinessValue.text = String.format(
+                    getString(R.string.cloudiness_value),
+                    ((it.cloudiness * 100).toInt()).toString(),
+                    '%'
+                )
+                sunDayValue.text = String.format(
+                    getString(R.string.sun_day_value),
+                    it.sunrise,
+                    it.sunset
+                )
+                longitudeDayValue.text = String.format(
+                    getString(R.string.longitude_day_value),
+                    longitudeSunDay(it.sunrise, it.sunset)
+                )
+                moonValue.text = it.moon
+            }
+            /*
             binding.timeAfterLastUpdate.text = String.format(
                 getString(R.string.time_after_last_update),
                 "",
@@ -89,6 +144,7 @@ class DetailsFragment : Fragment() {
                 longitudeSunDay(it.sunrise, it.sunset)
             )
             binding.moonValue.text = it.moon
+            */
 /*
 * imitations of time delay
 * */
