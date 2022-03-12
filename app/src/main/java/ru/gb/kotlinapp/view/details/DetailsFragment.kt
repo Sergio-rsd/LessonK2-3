@@ -10,15 +10,27 @@ import androidx.fragment.app.Fragment
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.FragmentWeatherCityBinding
 import ru.gb.kotlinapp.model.Weather
+import ru.gb.kotlinapp.model.WeatherDTO
 import ru.gb.kotlinapp.util.longitudeSunDay
 import ru.gb.kotlinapp.util.plusMinusTemperature
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(R.layout.main_fragment) {
     private var _binding: FragmentWeatherCityBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var weatherBundle: Weather
+
+    private val onLoadListener: WeatherLoader.WeatherLoaderListener = object : WeatherLoader.WeatherLoaderListener {
+        override fun onLoaded(weatherDTO: WeatherDTO) {
+            displayWeather(weatherDTO)
+        }
+
+        override fun onFailed(throwable: Throwable) {
+           // TODO обработка ошибки
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +44,8 @@ class DetailsFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        weatherBundle = arguments?.getParcelable<Weather>(BUNDLE_EXTRA)?:Weather()
 
         arguments?.getParcelable<Weather>(BUNDLE_EXTRA)?.let {
             it.city.also { city ->
@@ -91,60 +105,6 @@ class DetailsFragment : Fragment() {
                 )
                 moonValue.text = it.moon
             }
-            /*
-            binding.timeAfterLastUpdate.text = String.format(
-                getString(R.string.time_after_last_update),
-                "",
-                ""
-            )
-            binding.currentTimeData.text = String.format(
-                getString(R.string.current_time_data),
-                SimpleDateFormat("HH:mm, EEEE, d MMMM").format(Calendar.getInstance().time)
-            )
-            binding.temperatureValue.text = String.format(
-                getString(R.string.current_weather_value),
-                plusMinusTemperature(it.temperature),
-                it.weatherCondition
-            )
-            binding.feelsLikeValue.text = String.format(
-                getString(R.string.feels_like_label_value),
-                plusMinusTemperature(it.feelsLike)
-            )
-            binding.precipitationStrengthValue.text = String.format(
-                getString(R.string.precipitation_strength_value),
-                it.precipitationStrength.toString()
-            )
-            binding.pressureMmValue.text = String.format(
-                getString(R.string.pressure_mm_value),
-                it.pressure.toString(),
-                it.pressureNormal.toString()
-            )
-            binding.humidityValue.text = String.format(
-                getString(R.string.humidity_value),
-                it.humidity.toString(),
-                '%'
-            )
-            binding.windValue.text = String.format(
-                getString(R.string.wind_value),
-                it.wind.toString(),
-                it.windDirection
-            )
-            binding.cloudinessValue.text = String.format(
-                getString(R.string.cloudiness_value),
-                ((it.cloudiness * 100).toInt()).toString(),
-                '%'
-            )
-            binding.sunDayValue.text = String.format(
-                getString(R.string.sun_day_value),
-                it.sunrise,
-                it.sunset
-            )
-            binding.longitudeDayValue.text = String.format(
-                getString(R.string.longitude_day_value),
-                longitudeSunDay(it.sunrise, it.sunset)
-            )
-            binding.moonValue.text = it.moon
-            */
 /*
 * imitations of time delay
 * */
@@ -158,6 +118,10 @@ class DetailsFragment : Fragment() {
                 }
             }.start()
         }
+    }
+
+    private fun displayWeather(weatherDTO: WeatherDTO){
+
     }
 
     override fun onDestroyView() {

@@ -11,8 +11,6 @@ import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.MainFragmentBinding
 import ru.gb.kotlinapp.model.Weather
 import ru.gb.kotlinapp.util.showSnackBar
-import ru.gb.kotlinapp.util.showSnackBarNoAction
-import ru.gb.kotlinapp.util.showSnackBarStringText
 import ru.gb.kotlinapp.view.details.DetailsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.MainViewModel
