@@ -55,15 +55,15 @@ class WeatherLoader(
                 } catch (e: Exception) {
                     Log.e("", "Failed connection", e)
                     e.printStackTrace()
-                    // TODO обработка try
                     listener.onFailed(e)
+                } finally {
+                    urlConnection.disconnect()
                 }
             }.start()
 
         } catch (e: MalformedURLException) {
             Log.e("", "Failed URI", e)
             e.printStackTrace()
-            // TODO обработка try
             listener.onFailed(e)
         }
     }

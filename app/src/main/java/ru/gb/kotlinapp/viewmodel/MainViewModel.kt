@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.gb.kotlinapp.model.Repository
 import ru.gb.kotlinapp.model.RepositoryImpl
-import ru.gb.kotlinapp.util.getRandomSuccess
 import java.lang.Thread.sleep
 
 class MainViewModel(
@@ -24,11 +23,14 @@ class MainViewModel(
         Thread {
             sleep(2000)
 
-            liveDataToObserve.postValue(AppState.Success(
-                if (isRussian)
-                    repositoryImpl.getWeatherFromLocalStorageRus()
-                else
-                    repositoryImpl.getWeatherFromLocalStorageWorld()))
+            liveDataToObserve.postValue(
+                AppState.Success(
+                    if (isRussian)
+                        repositoryImpl.getWeatherFromLocalStorageRus()
+                    else
+                        repositoryImpl.getWeatherFromLocalStorageWorld()
+                )
+            )
         }.start()
     }
 }

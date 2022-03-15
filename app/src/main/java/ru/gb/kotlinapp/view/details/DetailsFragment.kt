@@ -12,10 +12,9 @@ import ru.gb.kotlinapp.model.*
 import ru.gb.kotlinapp.util.cloudPercent
 import ru.gb.kotlinapp.util.longitudeSunDay
 import ru.gb.kotlinapp.util.plusMinusTemperature
+import ru.gb.kotlinapp.util.showSnackBarNoAction
 import java.text.SimpleDateFormat
 import java.util.*
-
-private const val TAG = "happy"
 
 class DetailsFragment : Fragment(R.layout.main_fragment) {
     private var _binding: FragmentWeatherCityBinding? = null
@@ -32,6 +31,10 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
 
             override fun onFailed(throwable: Throwable) {
                 // TODO обработка ошибки
+                binding.mainViewWeather.showSnackBarNoAction(
+                    throwable.toString(),
+                    ""
+                )
             }
         }
 
@@ -48,7 +51,7 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        weatherBundle = arguments?.getParcelable<Weather>(BUNDLE_EXTRA) ?: Weather()
+        weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
 
         binding.mainViewWeather.visibility = View.GONE
         binding.loadingLayout.visibility = View.VISIBLE
