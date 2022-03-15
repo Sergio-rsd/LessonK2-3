@@ -10,6 +10,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/mainViewWeather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -25,6 +26,7 @@
                 android:textSize="25sp"
                 android:textStyle="bold"
                 tools:text="Москва" />
+<!--
 
             <TextView
                 android:id="@+id/timeAfterLastUpdate"
@@ -32,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 tools:text="Обновлено 1 час назад" />
+-->
 
             <TextView
                 android:id="@+id/currentTimeData"
