@@ -31,14 +31,16 @@ class WeatherLoader(
             Thread {
                 lateinit var urlConnection: HttpURLConnection
                 try {
-                    urlConnection = uri.openConnection() as HttpURLConnection
-                    urlConnection.requestMethod = "GET"
-                    urlConnection.readTimeout = 10000
+                    urlConnection = (uri.openConnection() as HttpURLConnection).apply {
+                        requestMethod = "GET"
+                        readTimeout = 10000
 
-                    urlConnection.addRequestProperty(
-                        "X-Yandex-API-Key",
-                        BuildConfig.WEATHER_API_KEY
-                    )
+                        addRequestProperty(
+                            "X-Yandex-API-Key",
+                            BuildConfig.WEATHER_API_KEY
+                        )
+                    }
+
 
                     val bufferedReader =
                         BufferedReader(InputStreamReader(urlConnection.inputStream))
