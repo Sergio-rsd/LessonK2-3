@@ -30,7 +30,6 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
             }
 
             override fun onFailed(throwable: Throwable) {
-                // TODO обработка ошибки
                 binding.mainViewWeather.showSnackBarNoAction(
                     throwable.toString(),
                     ""
