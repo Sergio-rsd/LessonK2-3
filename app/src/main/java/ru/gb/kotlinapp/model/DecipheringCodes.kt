@@ -31,7 +31,7 @@ fun getWindDirection() = mapOf(
     "s" to "Ю",
     "sw" to "ЮЗ",
     "w" to "З",
-    "с" to "штиль"
+    "c" to "штиль"
 )
 
 fun getMoonCondition() = mapOf(
