@@ -1,6 +1,9 @@
 package ru.gb.kotlinapp.view.details
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +19,53 @@ import ru.gb.kotlinapp.util.showSnackBarNoAction
 import java.text.SimpleDateFormat
 import java.util.*
 
+const val CURRENT_TIME_DATE = "HH:mm, EEEE, d MMMM"
+const val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
+const val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
+const val DETAILS_INTENT_EMPTY_EXTRA = "INTENT IS EMPTY"
+const val DETAILS_DATA_EMPTY_EXTRA = "DATA IS EMPTY"
+const val DETAILS_RESPONSE_EMPTY_EXTRA = "RESPONSE IS EMPTY"
+const val DETAILS_REQUEST_ERROR_EXTRA = "REQUEST ERROR"
+const val DETAILS_REQUEST_ERROR_MESSAGE_EXTRA = "REQUEST ERROR MESSAGE"
+const val DETAILS_URL_MALFORMED_EXTRA = "URL MALFORMED"
+const val DETAILS_RESPONSE_SUCCESS_EXTRA = "RESPONSE SUCCESS"
+const val DETAILS_TEMP_EXTRA = "TEMPERATURE"
+const val DETAILS_FEELS_LIKE_EXTRA = "FEELS LIKE"
+const val DETAILS_CONDITION_EXTRA = "CONDITION"
+private const val TEMP_INVALID = -100
+private const val FEELS_LIKE_INVALID = -100
+private const val PROCESS_ERROR = "Обработка ошибки"
+
 class DetailsFragment : Fragment(R.layout.main_fragment) {
     private var _binding: FragmentWeatherCityBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var weatherBundle: Weather
 
+    private val loadResultReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.getStringExtra(DETAILS_LOAD_RESULT_EXTRA)) {
+                DETAILS_INTENT_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
+                DETAILS_DATA_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
+                DETAILS_RESPONSE_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
+                DETAILS_REQUEST_ERROR_EXTRA -> TODO(PROCESS_ERROR)
+                DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> TODO(PROCESS_ERROR)
+                DETAILS_URL_MALFORMED_EXTRA -> TODO(PROCESS_ERROR)
+
+                DETAILS_RESPONSE_SUCCESS_EXTRA -> displayWeather(
+                    WeatherDTO(
+                        FactDTO(
+                            intent.getIntExtra(DETAILS_TEMP_EXTRA, TEMP_INVALID
+                            ),
+                            intent.getIntExtra(DETAILS_FEELS_LIKE_EXTRA, FEELS_LIKE_INVALID),
+                            intent.getStringExtra(DETAILS_CONDITION_EXTRA)
+                        )
+                    )
+                )
+            }
+        }
+
+    }
 
     private val onLoadListener: WeatherLoader.WeatherLoaderListener =
         object : WeatherLoader.WeatherLoaderListener {
@@ -71,7 +115,7 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
 
             currentTimeData.text = String.format(
                 getString(R.string.current_time_data),
-                SimpleDateFormat("HH:mm, EEEE, d MMMM").format(Calendar.getInstance().time)
+                SimpleDateFormat(CURRENT_TIME_DATE).format(Calendar.getInstance().time)
             )
             weatherDTO.fact?.let {
                 temperatureValue.text = String.format(

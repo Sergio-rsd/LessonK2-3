@@ -25,4 +25,5 @@
     <string name="longitude_day">Долгота дня:</string>
     <string name="longitude_day_value">%s</string>
     <string name="moon">Фаза луны:</string>
+    <string name="yandex_api">https://api.weather.yandex.ru/v2/forecast?lat=${%f}&amp;lon=${%f}</string>
 </resources>

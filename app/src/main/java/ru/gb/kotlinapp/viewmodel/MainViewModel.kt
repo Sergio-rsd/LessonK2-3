@@ -21,7 +21,6 @@ class MainViewModel(
     private fun getDataFromLocalSource(isRussian: Boolean) {
         liveDataToObserve.value = AppState.Loading
         Thread {
-            sleep(2000)
 
             liveDataToObserve.postValue(
                 AppState.Success(

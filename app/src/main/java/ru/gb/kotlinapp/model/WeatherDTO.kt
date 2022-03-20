@@ -24,8 +24,7 @@ data class ForecastsDTO(
     val sunset: String?,
     val moon_text: String,
     val parts: ForecastsPartDTO?,
-
-    )
+)
 
 data class ForecastsPartDTO(
     val day: ForecastsDayDTO?

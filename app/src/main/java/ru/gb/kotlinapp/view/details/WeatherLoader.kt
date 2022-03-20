@@ -14,6 +14,10 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.stream.Collectors
 
+private const val REQUEST_API_KEY = "X-Yandex-API-Key"
+private const val REQUEST_GET = "GET"
+private const val REQUEST_TIMEOUT = 10000
+
 @RequiresApi(Build.VERSION_CODES.N)
 class WeatherLoader(
     private val listener: WeatherLoaderListener,
@@ -23,20 +27,22 @@ class WeatherLoader(
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun loadWeather() {
+
         try {
             val uri =
                 URL("https://api.weather.yandex.ru/v2/forecast?lat=${lat}&lon=${lon}")
+
             val handler = Handler()
 
             Thread {
                 lateinit var urlConnection: HttpURLConnection
                 try {
                     urlConnection = (uri.openConnection() as HttpURLConnection).apply {
-                        requestMethod = "GET"
-                        readTimeout = 10000
+                        requestMethod = REQUEST_GET
+                        readTimeout = REQUEST_TIMEOUT
 
                         addRequestProperty(
-                            "X-Yandex-API-Key",
+                            REQUEST_API_KEY,
                             BuildConfig.WEATHER_API_KEY
                         )
                     }
