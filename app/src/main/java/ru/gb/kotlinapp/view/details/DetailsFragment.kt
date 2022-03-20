@@ -113,7 +113,6 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         binding.loadingLayout.visibility = View.VISIBLE
 
         val loader = WeatherLoader(onLoadListener, weatherBundle.city.lat, weatherBundle.city.lon)
-
         loader.loadWeather()
 */
         getWeather()
