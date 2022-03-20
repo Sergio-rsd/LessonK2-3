@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fragmentBackground">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/mainViewWeather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical"
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="vertical">
+
+            <TextView
+                android:id="@+id/cityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                tools:text="Москва" />
+<!--
+
+            <TextView
+                android:id="@+id/timeAfterLastUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                tools:text="Обновлено 1 час назад" />
+-->
+
+            <TextView
+                android:id="@+id/currentTimeData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                tools:text="Сейчас, 16:35, Среда, 9 февраля" />
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/current_weather" />
+
+                <TextView
+                    android:id="@+id/temperatureValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="-1°; снег с дождём" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/feels_like_label" />
+
+                <TextView
+                    android:id="@+id/feelsLikeValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="-3°" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/precipitation_strength" />
+
+                <TextView
+                    android:id="@+id/precipitationStrengthValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="10 мм/час" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/pressure_mm" />
+
+                <TextView
+                    android:id="@+id/pressureMmValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="751/741 мм.рт.ст." />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/humidity" />
+
+                <TextView
+                    android:id="@+id/humidityValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="85%" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/wind" />
+
+                <TextView
+                    android:id="@+id/windValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="7.5 м/с, Ю" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/cloudiness" />
+
+                <TextView
+                    android:id="@+id/cloudinessValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="100%" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/sun_day" />
+
+                <TextView
+                    android:id="@+id/sunDayValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="07:45/17:42" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/longitude_day" />
+
+                <TextView
+                    android:id="@+id/longitudeDayValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="09:17" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/moon" />
+
+                <TextView
+                    android:id="@+id/moonValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="Убывающая луна" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/loadingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/loadingBackground"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progress="5" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
