@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.FragmentWeatherCityBinding
 import ru.gb.kotlinapp.model.*
@@ -52,14 +54,16 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                 DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_URL_MALFORMED_EXTRA -> TODO(PROCESS_ERROR)
 
-                DETAILS_RESPONSE_SUCCESS_EXTRA -> displayWeather(
+                DETAILS_RESPONSE_SUCCESS_EXTRA -> renderData(
                     WeatherDTO(
                         FactDTO(
-                            intent.getIntExtra(DETAILS_TEMP_EXTRA, TEMP_INVALID
+                            intent.getIntExtra(
+                                DETAILS_TEMP_EXTRA, TEMP_INVALID
                             ),
                             intent.getIntExtra(DETAILS_FEELS_LIKE_EXTRA, FEELS_LIKE_INVALID),
-                            intent.getStringExtra(DETAILS_CONDITION_EXTRA)
-                        )
+                            intent.getStringExtra(DETAILS_CONDITION_EXTRA),
+                            null, null, null, null, null
+                        ), emptyList(), null
                     )
                 )
             }
@@ -81,6 +85,14 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
             }
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context?.let {
+            LocalBroadcastManager.getInstance(it)
+                .registerReceiver(loadResultReceiver, IntentFilter(DETAILS_INTENT_FILTER))
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -96,13 +108,52 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
 
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
 
+/*
         binding.mainViewWeather.visibility = View.GONE
         binding.loadingLayout.visibility = View.VISIBLE
 
         val loader = WeatherLoader(onLoadListener, weatherBundle.city.lat, weatherBundle.city.lon)
 
         loader.loadWeather()
+*/
+        getWeather()
+    }
 
+    private fun getWeather() {
+        binding.mainViewWeather.visibility = View.GONE
+        binding.loadingLayout.visibility = View.VISIBLE
+        context?.let {
+            it.startService(Intent(it, DetailsService::class.java).apply {
+                putExtra(LATITUDE_EXTRA, weatherBundle.city.lat)
+                putExtra(LONGITUDE_EXTRA, weatherBundle.city.lon)
+            })
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun renderData(weatherDTO: WeatherDTO) {
+        with(binding) {
+            mainViewWeather.visibility = View.VISIBLE
+            loadingLayout.visibility = View.GONE
+            val city = weatherBundle.city
+            cityName.text = city.city
+
+            currentTimeData.text = String.format(
+                getString(R.string.current_time_data),
+                SimpleDateFormat(CURRENT_TIME_DATE).format(Calendar.getInstance().time)
+            )
+            weatherDTO.fact?.let {
+                temperatureValue.text = String.format(
+                    getString(R.string.current_weather_value),
+                    plusMinusTemperature(it.temp),
+                    getCondition()[it.condition]
+                )
+                feelsLikeValue.text = String.format(
+                    getString(R.string.feels_like_label_value),
+                    plusMinusTemperature(it.feels_like)
+                )
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -171,6 +222,13 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        context?.let {
+            LocalBroadcastManager.getInstance(it).unregisterReceiver(loadResultReceiver)
+        }
+        super.onDestroy()
     }
 
     companion object {
