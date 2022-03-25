@@ -2,6 +2,7 @@ package ru.gb.kotlinapp.util
 
 const val DEBUG_VALUE = false
 const val BASE_URL = "https://api.weather.yandex.ru/"
+const val HEADER_DETAIL_ICON = "https://freepngimg.com/thumb/city/36275-3-city-hd.png"
 const val SERVER_ERROR = "Ошибка сервера"
 const val REQUEST_ERROR = "Ошибка запроса на сервер"
 const val CORRUPTED_DATA = "Неполные данные"
