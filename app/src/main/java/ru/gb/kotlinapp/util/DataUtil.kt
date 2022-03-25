@@ -7,7 +7,23 @@ fun convertDtoToModel(weatherDTO: WeatherDTO): List<Weather> {
     val forecasts = weatherDTO.forecasts[0]!!
     val info = weatherDTO.info!!
     val partDayPressure = weatherDTO.forecasts[0]!!.parts!!.day!!
-    return listOf(Weather((getDefaultCity()), fact.temp!!, fact.feels_like!!, fact.condition!!))
+    return listOf(
+        Weather(
+            (getDefaultCity()),
+            fact.temp!!,
+            fact.feels_like!!,
+            fact.condition!!,
+            partDayPressure.prec_mm!!,
+            fact.pressure_mm!!,
+            info.def_pressure_mm!!,
+            fact.humidity!!,
+            fact.wind_speed!!,
+            fact.wind_dir!!,
+            fact.cloudness!!,
+            forecasts.sunrise!!,
+            forecasts.sunset!!,
+            forecasts.moon_text!!
+        ))
 }
 
 fun checkDTOtoNull(serverResponse: WeatherDTO): Boolean {
