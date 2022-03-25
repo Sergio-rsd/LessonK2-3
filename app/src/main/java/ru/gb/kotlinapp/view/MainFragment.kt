@@ -88,12 +88,14 @@ class MainFragment : Fragment() {
                 binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
             }
             is AppState.Error -> {
-                binding.mainFragmentLoadingLayout.visibility = View.GONE
-                binding.mainFragmentRootView.showSnackBar(
-                    getString(R.string.error),
-                    getString(R.string.reload),
-                    { viewModel.getWeatherFromLocalSourceRus() }
-                )
+                binding.apply {
+                    mainFragmentLoadingLayout.visibility = View.GONE
+                    mainFragmentRootView.showSnackBar(
+                        getString(R.string.error),
+                        getString(R.string.reload),
+                        { viewModel.getWeatherFromLocalSourceRus() }
+                    )
+                }
             }
         }
     }

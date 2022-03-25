@@ -22,7 +22,7 @@ data class FactDTO(
 data class ForecastsDTO(
     val sunrise: String?,
     val sunset: String?,
-    val moon_text: String,
+    val moon_text: String?,
     val parts: ForecastsPartDTO?
 )
 

@@ -4,20 +4,18 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.lifecycle.ViewModelProvider
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.FragmentWeatherCityBinding
 import ru.gb.kotlinapp.model.*
-import ru.gb.kotlinapp.util.cloudPercent
-import ru.gb.kotlinapp.util.longitudeSunDay
-import ru.gb.kotlinapp.util.plusMinusTemperature
-import ru.gb.kotlinapp.util.showSnackBarNoAction
+import ru.gb.kotlinapp.util.*
+import ru.gb.kotlinapp.viewmodel.AppState
+import ru.gb.kotlinapp.viewmodel.DetailsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,6 +41,10 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     private val binding get() = _binding!!
 
     private lateinit var weatherBundle: Weather
+
+    private val viewModel: DetailsViewModel by lazy {
+        ViewModelProvider(this)[DetailsViewModel::class.java]
+    }
 
     private val loadResultReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -84,14 +86,14 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                 )
             }
         }
-
+/*
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context?.let {
             LocalBroadcastManager.getInstance(it)
                 .registerReceiver(loadResultReceiver, IntentFilter(DETAILS_INTENT_FILTER))
         }
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -108,6 +110,7 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
 
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
 
+        viewModel.detailsLiveData.observe(viewLifecycleOwner) { renderDataWeather(it) }
 /*
         binding.mainViewWeather.visibility = View.GONE
         binding.loadingLayout.visibility = View.VISIBLE
@@ -115,7 +118,63 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         val loader = WeatherLoader(onLoadListener, weatherBundle.city.lat, weatherBundle.city.lon)
         loader.loadWeather()
 */
-        getWeather()
+        // TODO stopping
+        requestWeather()
+    }
+
+    private fun renderDataWeather(appState: AppState) {
+        when (appState) {
+            is AppState.Success -> {
+                binding.mainViewWeather.visibility = View.VISIBLE
+                binding.loadingLayout.visibility = View.GONE
+                setWeather(appState.weatherData[0])
+            }
+            is AppState.Loading -> {
+                binding.mainViewWeather.visibility = View.GONE
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Error -> {
+                binding.mainViewWeather.visibility = View.VISIBLE
+                binding.loadingLayout.visibility = View.GONE
+                binding.mainViewWeather.showSnackBar(
+                    getString(R.string.error),
+                    getString(R.string.reload),
+                    { requestWeather() }
+                )
+            }
+        }
+    }
+
+    private fun requestWeather() {
+        viewModel.getWeatherFromRemoteSource(weatherBundle.city.lat, weatherBundle.city.lon)
+    }
+
+    private fun setWeather(weather: Weather) {
+        val city = weatherBundle.city
+        with(binding) {
+            cityName.text = city.city
+
+            currentTimeData.text = String.format(
+                getString(R.string.current_time_data),
+                SimpleDateFormat(CURRENT_TIME_DATE).format(Calendar.getInstance().time)
+            )
+            weather.let {
+                temperatureValue.text = String.format(
+                    getString(R.string.current_weather_value),
+                    plusMinusTemperature(it.temperature),
+                    getCondition()[it.weatherCondition]
+                )
+                feelsLikeValue.text = String.format(
+                    getString(R.string.feels_like_label_value),
+                    plusMinusTemperature(it.feelsLike)
+                )
+                humidityValue.text = String.format(
+                    getString(R.string.humidity_value),
+                    it.humidity.toString(),
+                    '%'
+                )
+            }
+        }
     }
 
     private fun getWeather() {
@@ -224,9 +283,9 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     }
 
     override fun onDestroy() {
-        context?.let {
-            LocalBroadcastManager.getInstance(it).unregisterReceiver(loadResultReceiver)
-        }
+//        context?.let {
+//            LocalBroadcastManager.getInstance(it).unregisterReceiver(loadResultReceiver)
+//        }
         super.onDestroy()
     }
 
