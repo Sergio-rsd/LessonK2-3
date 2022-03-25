@@ -134,7 +134,7 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                 moonValue.text = getMoonCondition()[it.moon]
             }
         }
-        binding.headerIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+        binding.headerIcon.load(HEADER_DETAIL_ICON)
     }
 
     override fun onDestroyView() {
