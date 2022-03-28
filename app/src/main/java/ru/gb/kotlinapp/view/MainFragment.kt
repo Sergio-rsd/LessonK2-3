@@ -1,5 +1,6 @@
 package ru.gb.kotlinapp.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,9 @@ import ru.gb.kotlinapp.util.showSnackBar
 import ru.gb.kotlinapp.view.details.DetailsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.MainViewModel
+
+private const val IS_WORLD_KEY = "IS_WORLD_KEY"
+private const val LIST_OF_TOWNS = "LIST_OF_TOWNS"
 
 class MainFragment : Fragment() {
 
@@ -59,10 +63,29 @@ class MainFragment : Fragment() {
         }
 
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
-        viewModel.getWeatherFromLocalSourceRus()
+        showListOfTowns()
     }
 
-    private fun changeWeatherDataSet() =
+    private fun saveListOfTowns() {
+        activity?.let {
+            with(it.getSharedPreferences(LIST_OF_TOWNS,Context.MODE_PRIVATE).edit()) {
+                putBoolean(IS_WORLD_KEY, !isDataSetRus)
+                apply()
+            }
+        }
+    }
+
+    private fun showListOfTowns() {
+        activity?.let {
+            if (it.getSharedPreferences(LIST_OF_TOWNS,Context.MODE_PRIVATE).getBoolean(IS_WORLD_KEY, false)) {
+                changeWeatherDataSet()
+            } else {
+                viewModel.getWeatherFromLocalSourceRus()
+            }
+        }
+    }
+
+    private fun changeWeatherDataSet() {
         if (isDataSetRus) {
             viewModel.getWeatherFromLocalSourceWorld()
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
@@ -70,6 +93,8 @@ class MainFragment : Fragment() {
             viewModel.getWeatherFromLocalSourceRus()
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
         }.also { isDataSetRus = !isDataSetRus }
+        saveListOfTowns()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

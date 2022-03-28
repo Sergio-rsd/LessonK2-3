@@ -50,7 +50,11 @@ fun getWorldCities() = listOf(
     ),
     Weather(
         City("Нью-Йорк",40.714606, -74.002800 )
+    ),
+    Weather(
+        City("Детройт",  42.331680, -83.046652)
     )
+
 )
 
 fun getRussianCities() = listOf(
