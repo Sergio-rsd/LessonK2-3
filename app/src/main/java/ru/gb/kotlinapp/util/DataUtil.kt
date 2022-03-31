@@ -1,6 +1,10 @@
 package ru.gb.kotlinapp.util
 
-import ru.gb.kotlinapp.model.*
+import ru.gb.kotlinapp.model.City
+import ru.gb.kotlinapp.model.Weather
+import ru.gb.kotlinapp.model.WeatherDTO
+import ru.gb.kotlinapp.model.getDefaultCity
+import ru.gb.kotlinapp.model.room.HistoryEntity
 
 fun convertDtoToModel(weatherDTO: WeatherDTO): List<Weather> {
     val fact = weatherDTO.fact!!
@@ -23,7 +27,8 @@ fun convertDtoToModel(weatherDTO: WeatherDTO): List<Weather> {
             forecasts.sunrise!!,
             forecasts.sunset!!,
             forecasts.moon_text!!
-        ))
+        )
+    )
 }
 
 fun checkDTOtoNull(serverResponse: WeatherDTO): Boolean {
@@ -45,4 +50,14 @@ fun checkDTOtoNull(serverResponse: WeatherDTO): Boolean {
             || forecasts?.moon_text.isNullOrEmpty()
             || info?.def_pressure_mm == null
             || partDayPressure?.prec_mm == null)
+}
+
+fun convertHistoryEntityToWeather(entityList: List<HistoryEntity>): List<Weather> {
+    return entityList.map {
+        Weather(City(it.city, 0.0, 0.0), it.temperature, 0, it.condition)
+    }
+}
+
+fun convertWeatherToEntity(weather: Weather): HistoryEntity {
+    return HistoryEntity(0, weather.city.city, weather.temperature, weather.weatherCondition)
 }

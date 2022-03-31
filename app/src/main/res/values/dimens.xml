@@ -14,4 +14,5 @@
     <dimen name="recycler_item_line_margin_end">20dp</dimen>
     <dimen name="town_header_height">100dp</dimen>
     <dimen name="main_details_weather_margin">5dp</dimen>
+    <dimen name="hairline">1dp</dimen>
 </resources>

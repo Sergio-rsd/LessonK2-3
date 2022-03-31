@@ -5,15 +5,19 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.gb.kotlinapp.App.Companion.getHistoryDao
+import ru.gb.kotlinapp.model.Weather
 import ru.gb.kotlinapp.model.WeatherDTO
 import ru.gb.kotlinapp.model.repository.DetailsRepository
 import ru.gb.kotlinapp.model.repository.DetailsRepositoryImpl
+import ru.gb.kotlinapp.model.repository.LocalRepositoryImpl
 import ru.gb.kotlinapp.model.repository.RemoteDataSource
 import ru.gb.kotlinapp.util.*
 
 class DetailsViewModel(
     val detailsLiveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val detailsRepositoryImpl: DetailsRepository = DetailsRepositoryImpl(RemoteDataSource())
+    private val detailsRepositoryImpl: DetailsRepository = DetailsRepositoryImpl(RemoteDataSource()),
+    private val historyRepositoryImpl: LocalRepositoryImpl = LocalRepositoryImpl(getHistoryDao())
 ) : ViewModel() {
 
     private val callBack = object : Callback<WeatherDTO> {
@@ -39,6 +43,10 @@ class DetailsViewModel(
                 AppState.Success(convertDtoToModel(serverResponse))
             }
         }
+    }
+
+    fun saveCityToDB(weather: Weather) {
+        historyRepositoryImpl.saveEntity(weather)
     }
 
     fun getWeatherFromRemoteSource(lat: Double, lon: Double) {

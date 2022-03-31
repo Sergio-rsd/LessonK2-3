@@ -10,10 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import coil.load
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.FragmentWeatherCityBinding
-import ru.gb.kotlinapp.model.Weather
-import ru.gb.kotlinapp.model.getCondition
-import ru.gb.kotlinapp.model.getMoonCondition
-import ru.gb.kotlinapp.model.getWindDirection
+import ru.gb.kotlinapp.model.*
 import ru.gb.kotlinapp.util.*
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.DetailsViewModel
@@ -84,6 +81,8 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         with(binding) {
             cityName.text = city.city
 
+            saveCity(city, weather)
+
             currentTimeData.text = String.format(
                 getString(R.string.current_time_data),
                 SimpleDateFormat(CURRENT_TIME_DATE).format(Calendar.getInstance().time)
@@ -133,13 +132,28 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                 )
                 moonValue.text = getMoonCondition()[it.moon]
             }
+            headerIcon.load(HEADER_DETAIL_ICON)
         }
-        binding.headerIcon.load(HEADER_DETAIL_ICON)
+//        binding.headerIcon.load(HEADER_DETAIL_ICON)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun saveCity(
+        city: City,
+        weather: Weather
+    ) {
+        viewModel.saveCityToDB(
+            Weather(
+                city,
+                weather.temperature,
+                weather.feelsLike,
+                weather.weatherCondition
+            )
+        )
     }
 
     companion object {
