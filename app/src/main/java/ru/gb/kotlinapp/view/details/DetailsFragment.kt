@@ -51,22 +51,28 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     private fun renderDataWeather(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                binding.mainViewWeather.visibility = View.VISIBLE
-                binding.loadingLayout.visibility = View.GONE
+                with(binding) {
+                    mainViewWeather.visibility = View.VISIBLE
+                    loadingLayout.visibility = View.GONE
+                }
                 setWeather(appState.weatherData[0])
             }
             is AppState.Loading -> {
-                binding.mainViewWeather.visibility = View.GONE
-                binding.loadingLayout.visibility = View.VISIBLE
+                with(binding) {
+                    mainViewWeather.visibility = View.GONE
+                    loadingLayout.visibility = View.VISIBLE
+                }
             }
             is AppState.Error -> {
-                binding.mainViewWeather.visibility = View.VISIBLE
-                binding.loadingLayout.visibility = View.GONE
-                binding.mainViewWeather.showSnackBar(
-                    getString(R.string.error),
-                    getString(R.string.reload),
-                    { requestWeather() }
-                )
+                with(binding) {
+                    mainViewWeather.visibility = View.VISIBLE
+                    loadingLayout.visibility = View.GONE
+                    mainViewWeather.showSnackBar(
+                        getString(R.string.error),
+                        getString(R.string.reload),
+                        { requestWeather() }
+                    )
+                }
             }
         }
     }
