@@ -5,10 +5,11 @@
 /*    id 'org.jetbrains.kotlin.android'*/
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
- /*   id 'kotlin-parcelize'*/
+//    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
+//    id 'kotlin-parcelize'
     id 'kotlin-android-extensions'
-    id 'kotlin-kapt'
+//    id 'kotlin-kapt'
 }
 
 android {
@@ -50,8 +51,9 @@ android {
 
 dependencies {
     //Room
+    def room_version = '2.4.2'
     implementation 'androidx.room:room-runtime:2.4.2'
-    kapt 'androidx.room:room-compiler:2.4.2'
+    annotationProcessor 'androidx.room:room-compiler:2.4.2'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
