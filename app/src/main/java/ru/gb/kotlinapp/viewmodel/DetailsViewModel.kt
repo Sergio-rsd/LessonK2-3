@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.gb.kotlinapp.App
 import ru.gb.kotlinapp.model.WeatherDTO
-import ru.gb.kotlinapp.model.repository.DetailsRepository
-import ru.gb.kotlinapp.model.repository.DetailsRepositoryImpl
-import ru.gb.kotlinapp.model.repository.RemoteDataSource
+import ru.gb.kotlinapp.model.repository.*
 import ru.gb.kotlinapp.util.*
 
 class DetailsViewModel(
+    private val historyRepositoryImpl : LocalRepository = LocalRepositoryImpl(App.getHistoryDao()),
     val detailsLiveData: MutableLiveData<AppState> = MutableLiveData(),
     private val detailsRepositoryImpl: DetailsRepository = DetailsRepositoryImpl(RemoteDataSource())
 ) : ViewModel() {
