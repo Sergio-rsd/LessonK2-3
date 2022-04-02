@@ -19,7 +19,7 @@ class App : Application() {
         fun getHistoryDao(): HistoryDao {
             synchronized(HistoryDataBase::class.java) {
                 if (db == null) {
-                    if (appInstance == null) throw IllegalStateException("APP must not be null")
+                    if (appInstance == null) throw IllegalAccessException("APP must not be null")
                     db = Room.databaseBuilder(
                         appInstance!!.applicationContext,
                         HistoryDataBase::class.java,
