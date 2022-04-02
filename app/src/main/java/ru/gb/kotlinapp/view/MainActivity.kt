@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                     beginTransaction()
                         .add(R.id.container, HistoryFragment.newInstance())
                         .addToBackStack("")
-                        .commitNowAllowingStateLoss()
+                        .commitAllowingStateLoss()
                 }
                 true
             }
