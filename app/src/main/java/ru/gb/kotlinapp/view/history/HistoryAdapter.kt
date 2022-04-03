@@ -3,9 +3,9 @@ package ru.gb.kotlinapp.view.history
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_history_recyclerview_item.view.*
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.model.Weather
 
@@ -20,7 +20,8 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolde
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(data: Weather) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
-                itemView.recyclerViewItem.text =
+//                itemView.recyclerViewItem.text =
+                itemView.findViewById<TextView>(R.id.recyclerViewItem).text =
                     String.format(
                         "%s %d %s",
                         data.city.city,
