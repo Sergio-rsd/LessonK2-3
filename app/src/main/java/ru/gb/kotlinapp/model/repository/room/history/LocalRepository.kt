@@ -1,4 +1,4 @@
-package ru.gb.kotlinapp.model.repository
+package ru.gb.kotlinapp.model.repository.room.history
 
 import ru.gb.kotlinapp.model.Weather
 

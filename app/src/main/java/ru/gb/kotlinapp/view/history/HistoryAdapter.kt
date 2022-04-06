@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.model.Weather
+import ru.gb.kotlinapp.model.getCondition
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>() {
     private var data: List<Weather> = arrayListOf()
@@ -20,22 +21,23 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolde
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(data: Weather) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
-//                itemView.recyclerViewItem.text =
-                itemView.findViewById<TextView>(R.id.recyclerViewItem).text =
-                    String.format(
-                        "%s %d %s",
-                        data.city.city,
-                        data.temperature,
-                        data.weatherCondition
-                    )
-
-                itemView.setOnClickListener {
-                    Toast.makeText(
-                        itemView.context,
-                        "on click: ${data.city.city}",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                itemView.apply {
+                    findViewById<TextView>(R.id.recyclerViewItem).text =
+                        String.format(
+//                            "%s %d %s",
+                            context.getString(R.string.item_history),
+                            data.city.city,
+                            data.temperature.toString(),
+                            getCondition()[data.weatherCondition]
+                        )
+                    setOnClickListener {
+                        Toast.makeText(
+                            itemView.context,
+                            "on click: ${data.city.city}",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 }
             }
         }

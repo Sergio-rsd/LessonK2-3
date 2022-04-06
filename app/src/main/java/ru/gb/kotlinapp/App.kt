@@ -1,9 +1,10 @@
 package ru.gb.kotlinapp
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.room.Room
-import ru.gb.kotlinapp.model.room.HistoryDao
-import ru.gb.kotlinapp.model.room.HistoryDataBase
+import ru.gb.kotlinapp.model.room.history.HistoryDao
+import ru.gb.kotlinapp.model.room.history.HistoryDataBase
 
 class App : Application() {
     override fun onCreate() {
@@ -26,6 +27,7 @@ class App : Application() {
                         HistoryDataBase::class.java,
                         DB_NAME
                     )
+                            // TODO потоки!!!!
                         .allowMainThreadQueries()
                         .build()
                 }

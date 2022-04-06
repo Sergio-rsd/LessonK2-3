@@ -4,7 +4,9 @@ import ru.gb.kotlinapp.model.City
 import ru.gb.kotlinapp.model.Weather
 import ru.gb.kotlinapp.model.WeatherDTO
 import ru.gb.kotlinapp.model.getDefaultCity
-import ru.gb.kotlinapp.model.room.HistoryEntity
+import ru.gb.kotlinapp.model.room.city.CityEntity
+import ru.gb.kotlinapp.model.room.city.CityWithHistory
+import ru.gb.kotlinapp.model.room.history.HistoryEntity
 
 fun convertDtoToModel(weatherDTO: WeatherDTO): List<Weather> {
     val fact = weatherDTO.fact!!
@@ -52,12 +54,18 @@ fun checkDTOtoNull(serverResponse: WeatherDTO): Boolean {
             || partDayPressure?.prec_mm == null)
 }
 
-fun convertHistoryEntityToWeather(entityList: List<HistoryEntity>): List<Weather> {
+fun convertHistoryEntityToWeather(entityList: List<CityWithHistory>): List<Weather> {
     return entityList.map {
         Weather(City(it.city, 0.0, 0.0), it.temperature, 0, it.condition)
     }
 }
 
-fun convertWeatherToEntity(weather: Weather): HistoryEntity {
-    return HistoryEntity(0, weather.city.city, weather.temperature, weather.weatherCondition)
+fun convertWeatherToEntity(weather: Weather, city: List<CityEntity>): HistoryEntity {
+
+//    return HistoryEntity(0, weather.city.city, weather.temperature, weather.weatherCondition)
+    return HistoryEntity(0, city[0].id, weather.temperature, weather.weatherCondition)
+}
+
+fun convertCityToEntity(city: City) : CityEntity {
+    return CityEntity(0, city.city)
 }

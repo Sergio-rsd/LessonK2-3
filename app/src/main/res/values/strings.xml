@@ -28,4 +28,6 @@
     <string name="yandex_api">https://api.weather.yandex.ru/v2/forecast?lat=${%f}&amp;lon=${%f}</string>
     <string name="system_text">СИСТЕМНОЕ СООБЩЕНИЕ\nAction:</string>
     <string name="menu_title_history">history</string>
+    <string name="item_history">%s, %s°, %s </string>
+
 </resources>

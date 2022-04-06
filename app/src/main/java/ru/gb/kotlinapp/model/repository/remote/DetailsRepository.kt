@@ -1,4 +1,4 @@
-package ru.gb.kotlinapp.model.repository
+package ru.gb.kotlinapp.model.repository.remote
 
 import ru.gb.kotlinapp.model.WeatherDTO
 

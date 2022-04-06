@@ -8,7 +8,10 @@ import retrofit2.Response
 import ru.gb.kotlinapp.App.Companion.getHistoryDao
 import ru.gb.kotlinapp.model.Weather
 import ru.gb.kotlinapp.model.WeatherDTO
-import ru.gb.kotlinapp.model.repository.*
+import ru.gb.kotlinapp.model.repository.remote.DetailsRepository
+import ru.gb.kotlinapp.model.repository.remote.DetailsRepositoryImpl
+import ru.gb.kotlinapp.model.repository.remote.RemoteDataSource
+import ru.gb.kotlinapp.model.repository.room.history.LocalRepositoryImpl
 import ru.gb.kotlinapp.util.*
 
 class DetailsViewModel(

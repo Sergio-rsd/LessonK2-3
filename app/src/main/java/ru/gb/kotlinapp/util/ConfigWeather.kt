@@ -8,7 +8,11 @@ const val REQUEST_ERROR = "Ошибка запроса на сервер"
 const val CORRUPTED_DATA = "Неполные данные"
 
 const val CURRENT_TIME_DATE = "HH:mm, EEEE, d MMMM"
-
+const val TAG ="happy"
+const val SHARE_PREF = "/shared_prefs/"
+const val SUFFIX_XML = ".xml"
+const val EXIST_CITY = "EXIST_CITY"
+const val ADD_CITY = "CONTROL_CITY"
 
 data class ConfigWeather(
     val DEBUG: Boolean = true

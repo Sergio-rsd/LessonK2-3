@@ -10,6 +10,7 @@
         android:id="@+id/recyclerViewItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/recycler_item_history_text_size"
         android:layout_marginStart="@dimen/main_details_weather_margin"
         android:layout_marginTop="@dimen/main_details_weather_margin"
         tools:text="Header" />

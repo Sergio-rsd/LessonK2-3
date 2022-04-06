@@ -3,7 +3,7 @@ package ru.gb.kotlinapp.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.gb.kotlinapp.App
-import ru.gb.kotlinapp.model.repository.LocalRepositoryImpl
+import ru.gb.kotlinapp.model.repository.room.history.LocalRepositoryImpl
 
 class HistoryViewModel(
     val historyLiveData: MutableLiveData<AppState> = MutableLiveData(),

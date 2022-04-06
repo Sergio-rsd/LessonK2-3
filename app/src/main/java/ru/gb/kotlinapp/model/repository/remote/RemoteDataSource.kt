@@ -1,4 +1,4 @@
-package ru.gb.kotlinapp.model.repository
+package ru.gb.kotlinapp.model.repository.remote
 
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor

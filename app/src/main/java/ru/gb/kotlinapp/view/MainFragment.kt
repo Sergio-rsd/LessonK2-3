@@ -10,14 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.MainFragmentBinding
-import ru.gb.kotlinapp.model.Weather
+import ru.gb.kotlinapp.model.*
+import ru.gb.kotlinapp.util.EXIST_CITY
+import ru.gb.kotlinapp.util.SHARE_PREF
+import ru.gb.kotlinapp.util.SUFFIX_XML
 import ru.gb.kotlinapp.util.showSnackBar
 import ru.gb.kotlinapp.view.details.DetailsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.MainViewModel
+import java.io.File
 
 private const val IS_WORLD_KEY = "IS_WORLD_KEY"
 private const val LIST_OF_TOWNS = "LIST_OF_TOWNS"
+private const val CITY_EXIST = "CITY_EXIST"
+private const val IS_CITY_KEY = "IS_CITY_KEY"
 
 class MainFragment : Fragment() {
 
@@ -68,7 +74,7 @@ class MainFragment : Fragment() {
 
     private fun saveListOfTowns() {
         activity?.let {
-            with(it.getSharedPreferences(LIST_OF_TOWNS,Context.MODE_PRIVATE).edit()) {
+            with(it.getSharedPreferences(LIST_OF_TOWNS, Context.MODE_PRIVATE).edit()) {
                 putBoolean(IS_WORLD_KEY, !isDataSetRus)
                 apply()
             }
@@ -77,7 +83,9 @@ class MainFragment : Fragment() {
 
     private fun showListOfTowns() {
         activity?.let {
-            if (it.getSharedPreferences(LIST_OF_TOWNS,Context.MODE_PRIVATE).getBoolean(IS_WORLD_KEY, false)) {
+            if (it.getSharedPreferences(LIST_OF_TOWNS, Context.MODE_PRIVATE)
+                    .getBoolean(IS_WORLD_KEY, false)
+            ) {
                 changeWeatherDataSet()
             } else {
                 viewModel.getWeatherFromLocalSourceRus()
@@ -123,5 +131,53 @@ class MainFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkingCitiesOnLoadOrAdd()
+    }
+
+    private fun checkingCitiesOnLoadOrAdd() {
+        if (!preferenceFileExist(CITY_EXIST)) {
+            activity?.let {
+                with(
+                    it.getSharedPreferences(CITY_EXIST, Context.MODE_PRIVATE)
+                        .edit()
+                ) {
+                    putString(IS_CITY_KEY, EXIST_CITY)
+                    apply()
+                }
+            }
+//  скопировать из базы в Entity города после первого запуска после установки
+            val cityList: MutableList<City> = gatherCities()
+            for (city in cityList) {
+                viewModel.saveCityToEntity(city)
+            }
+        } else {
+// проверка на совпадение городов в Weather и в базе Entity
+
+        }
+    }
+
+    private fun preferenceFileExist(fileName: String): Boolean {
+        val filePath = File(
+            context?.applicationInfo?.dataDir + SHARE_PREF
+                    + fileName + SUFFIX_XML
+        )
+        return filePath.exists()
+    }
+
+    private fun gatherCities(): MutableList<City> {
+        val cityList = mutableListOf<City>()
+        for (cityItem in getWorldCities()) {
+            cityList.add(cityItem.city)
+        }
+        for (cityItem in getRussianCities()) {
+            cityList.add(cityItem.city)
+        }
+        cityList.add(getDefaultCity())
+
+        return cityList
     }
 }

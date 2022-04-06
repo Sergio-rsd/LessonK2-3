@@ -2,13 +2,16 @@ package ru.gb.kotlinapp.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.gb.kotlinapp.App
+import ru.gb.kotlinapp.model.City
 import ru.gb.kotlinapp.model.Repository
 import ru.gb.kotlinapp.model.RepositoryImpl
-import java.lang.Thread.sleep
+import ru.gb.kotlinapp.model.repository.room.city.LocalRepoCityImpl
 
 class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryImpl: Repository = RepositoryImpl()
+    private val repositoryImpl: Repository = RepositoryImpl(),
+    private val cityRepoImpl: LocalRepoCityImpl = LocalRepoCityImpl(App.getHistoryDao())
 ) : ViewModel() {
 
     fun getLiveData() = liveDataToObserve
@@ -30,5 +33,9 @@ class MainViewModel(
                 )
             )
         }.start()
+    }
+
+    fun saveCityToEntity(city: City) {
+        cityRepoImpl.saveCity(city)
     }
 }
