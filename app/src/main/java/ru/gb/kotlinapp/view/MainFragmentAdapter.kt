@@ -55,5 +55,4 @@ class MainFragmentAdapter(private var onItemViewClickListener: OnItemViewClickLi
     }
 
     override fun getItemCount() = weatherData.size
-
 }

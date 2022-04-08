@@ -2,6 +2,7 @@ package ru.gb.kotlinapp.view.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +47,12 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         viewModel.detailsLiveData.observe(viewLifecycleOwner) { renderDataWeather(it) }
 
         requestWeather()
+
+    }
+
+    interface ClickButtonFavoriteListener {
+        //        fun clickButtonFavorite(view: View)
+        fun clickButtonFavorite(city: City): Boolean
     }
 
     private fun renderDataWeather(appState: AppState) {
@@ -84,10 +91,19 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     @SuppressLint("SimpleDateFormat")
     private fun setWeather(weather: Weather) {
         val city = weatherBundle.city
+
+        val cityState = viewModel.stateCityFavoriteNote(city)
+
         with(binding) {
             cityName.text = city.city
 
             saveCity(city, weather)
+
+            if (isFavoriteCity(cityState)) {
+                favoriteIcon.visibility = View.VISIBLE
+            } else {
+                favoriteIcon.visibility = View.GONE
+            }
 
             currentTimeData.text = String.format(
                 getString(R.string.current_time_data),
@@ -139,10 +155,42 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                 moonValue.text = getMoonCondition()[it.moon]
             }
             headerIcon.load(HEADER_DETAIL_ICON)
+            favoriteButton.setOnClickListener {
+//                viewModel.clickButtonFavorite(city)
+                val isFavorite = viewModel.clickButtonFavorite(city)
+                if (isFavorite) {
+                    favoriteIcon.visibility = View.VISIBLE
+                } else {
+                    favoriteIcon.visibility = View.GONE
+                }
+            }
+
+            noteCity.setText(noteCityCurrent(cityState))
+
+//            val cityNote = noteCity.toString()
+            val cityNote = noteCity.text.toString()
+//            val cityNote = getText(noteCity.text)
+
+            Log.d(TAG, "CityNote: $cityNote")
+            Log.d(TAG, "CityStateNote: $cityState")
+            viewModel.updateCityNote(city, cityNote)
         }
     }
 
+    private fun noteCityCurrent(cityState: City): String {
+        return cityState.note
+    }
+
+    private fun isFavoriteCity(cityState: City): Boolean {
+        return cityState.favorite
+    }
+
     override fun onDestroyView() {
+//        val cityNote = binding.noteCity.toString()
+//        val cityName = binding.cityName.toString()
+//        viewModel.updateCityNote(cityName, cityNote)
+
+
         super.onDestroyView()
         _binding = null
     }
@@ -171,3 +219,4 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         }
     }
 }
+

@@ -29,5 +29,7 @@
     <string name="system_text">СИСТЕМНОЕ СООБЩЕНИЕ\nAction:</string>
     <string name="menu_title_history">history</string>
     <string name="item_history">%s, %s°, %s </string>
+    <string name="favorite_text_button">Сделать Любимым</string>
+    <string name="note">Заметка</string>
 
 </resources>

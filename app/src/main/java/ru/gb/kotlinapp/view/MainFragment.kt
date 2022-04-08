@@ -11,10 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.MainFragmentBinding
 import ru.gb.kotlinapp.model.*
-import ru.gb.kotlinapp.util.EXIST_CITY
-import ru.gb.kotlinapp.util.SHARE_PREF
-import ru.gb.kotlinapp.util.SUFFIX_XML
-import ru.gb.kotlinapp.util.showSnackBar
+import ru.gb.kotlinapp.util.*
 import ru.gb.kotlinapp.view.details.DetailsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.MainViewModel
@@ -156,8 +153,22 @@ class MainFragment : Fragment() {
             }
         } else {
 // проверка на совпадение городов в Weather и в базе Entity
-
+            activity?.let {
+                with(
+                    it.getSharedPreferences(CITY_EXIST, Context.MODE_PRIVATE)
+                        .edit()
+                ) {
+                    putString(IS_CITY_KEY, ADD_CITY)
+                    apply()
+                }
+            }
         }
+        /*
+         val cityList: MutableList<City> = gatherCities()
+         for (city in cityList) {
+             viewModel.saveCityToEntity(city)
+         }
+         */
     }
 
     private fun preferenceFileExist(fileName: String): Boolean {

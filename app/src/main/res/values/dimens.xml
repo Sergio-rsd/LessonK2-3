@@ -13,7 +13,11 @@
     <dimen name="recycler_item_history_text_size">18sp</dimen>
     <dimen name="recycler_item_line_height">1dp</dimen>
     <dimen name="recycler_item_line_margin_end">20dp</dimen>
-    <dimen name="town_header_height">100dp</dimen>
+    <dimen name="town_header_height">95dp</dimen>
     <dimen name="main_details_weather_margin">5dp</dimen>
     <dimen name="hairline">1dp</dimen>
+
+    <dimen name="favorite_height_button">36dp</dimen>
+    <dimen name="favorite_text_size_button">13sp</dimen>
+
 </resources>

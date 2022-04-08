@@ -6,21 +6,9 @@ import ru.gb.kotlinapp.model.room.city.CityWithHistory
 
 @Dao
 interface HistoryDao {
-    /*
-            @Query("SELECT * FROM HistoryEntity")
-        fun all(): List<HistoryEntity>
-        */
-//    , CityEntity.cityId AS CityEntity.city_name
     @Transaction
-//@Query("SELECT * FROM HistoryEntity, CityEntity")
-//    @Query("SELECT HistoryEntity.temperature, HistoryEntity.condition, HistoryEntity.city_id, CityEntity.id, CityEntity.city AS city_name, CityEntity.favorite " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
-//    @Query("SELECT * " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
-    @Query("SELECT CityEntity.city, HistoryEntity.temperature, HistoryEntity.condition " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
+    @Query("SELECT CityEntity.city, HistoryEntity.temperature, HistoryEntity.condition, CityEntity.favorite, CityEntity.note " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
     fun all(): List<CityWithHistory>
-
-/*    @Query("SELECT * FROM HistoryEntity WHERE city LIKE :city")
-    fun getDataByTown(city: String): List<HistoryEntity>
-    */
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(entity: HistoryEntity)
@@ -40,4 +28,7 @@ interface HistoryDao {
     // добавление нового города
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertCity(entity: CityEntity)
+
+    @Update
+    fun updateCity(entity: CityEntity)
 }

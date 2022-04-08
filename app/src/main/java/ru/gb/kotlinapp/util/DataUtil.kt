@@ -56,16 +56,24 @@ fun checkDTOtoNull(serverResponse: WeatherDTO): Boolean {
 
 fun convertHistoryEntityToWeather(entityList: List<CityWithHistory>): List<Weather> {
     return entityList.map {
-        Weather(City(it.city, 0.0, 0.0), it.temperature, 0, it.condition)
+        Weather(City(it.city, 0.0, 0.0, it.favorite, it.note), it.temperature, 0, it.condition)
     }
 }
 
 fun convertWeatherToEntity(weather: Weather, city: List<CityEntity>): HistoryEntity {
-
-//    return HistoryEntity(0, weather.city.city, weather.temperature, weather.weatherCondition)
     return HistoryEntity(0, city[0].id, weather.temperature, weather.weatherCondition)
 }
 
-fun convertCityToEntity(city: City) : CityEntity {
-    return CityEntity(0, city.city)
+fun convertCityEntityToView(entityCity: List<CityEntity>): List<City> {
+    return entityCity.map {
+        City(it.city, 0.0, 0.0, it.favorite, it.note)
+    }
+}
+
+fun convertCityToEntity(city: City, cityId: Long): CityEntity {
+    return CityEntity(cityId, city.city, city.favorite, city.note)
+}
+
+fun convertCityToEntityInsert(city: City): CityEntity {
+    return CityEntity(0, city.city, city.favorite, city.note)
 }

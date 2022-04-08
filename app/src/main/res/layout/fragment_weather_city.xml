@@ -24,15 +24,30 @@
                 android:layout_height="@dimen/town_header_height"
                 android:scaleType="fitXY" />
 
-            <TextView
-                android:id="@+id/cityName"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                tools:text="Москва" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/cityName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/recycler_item_text_size"
+                    android:textStyle="bold"
+                    tools:text="Москва" />
+                <!--android:layout_marginBottom="@dimen/recycler_item_padding"-->
+                <ImageView
+                    android:id="@+id/favoriteIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="@dimen/recycler_item_padding"
+                    android:src="@drawable/ic_favorite"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
             <!--
 
                         <TextView
@@ -47,7 +62,7 @@
                 android:id="@+id/currentTimeData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="@dimen/recycler_item_padding"
                 android:gravity="center"
                 android:textStyle="bold"
                 tools:text="Сейчас, 16:35, Среда, 9 февраля" />
@@ -173,9 +188,50 @@
                     tools:text="Убывающая луна" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/favoriteButton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/favorite_height_button"
+                    android:layout_weight="1"
+                    android:text="@string/favorite_text_button"
+                    android:textSize="@dimen/favorite_text_size_button" />
+            </LinearLayout>
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lineBackgroundDark"
+                    android:layout_margin="3dp"
+                    android:padding="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/note" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/noteCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:layout_weight="10"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:textSize="15sp"
+                    android:padding="@dimen/main_details_weather_margin"
+                    tools:text="Note"
+                    />
+            </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/loadingLayout"
@@ -193,10 +249,10 @@
                     android:progress="5" />
             </FrameLayout>
 
-<!--            <include
-                android:id="@+id/includedLoadingLayout"
-                layout="@layout/loading_layout" />
-            -->
+            <!--            <include
+                            android:id="@+id/includedLoadingLayout"
+                            layout="@layout/loading_layout" />
+                        -->
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
