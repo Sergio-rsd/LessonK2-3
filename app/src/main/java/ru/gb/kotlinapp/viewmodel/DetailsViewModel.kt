@@ -1,5 +1,6 @@
 package ru.gb.kotlinapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
@@ -60,20 +61,32 @@ class DetailsViewModel(
         detailsRepositoryImpl.getWeatherDetailsFromServer(lat, lon, callBack)
     }
 
-    override fun clickButtonFavorite(city: City): Boolean {
-        val cityFavoriteClick = cityRepositoryImpl.getCityCondition(city)[0].favorite
+        override fun clickButtonFavorite(city: City): Boolean {
+//    override fun clickButtonFavorite(city: City) {
+//        val cityFavoriteClick = cityRepositoryImpl.getCityCondition(city)[0].favorite
+        val cityFavoriteClick = getCityFavorite(city)
         val cityLocal = City(city.city, city.lat, city.lat, !cityFavoriteClick, city.note)
         cityRepositoryImpl.updateCityCondition(cityLocal)
 //        Log.d(TAG, "clickButtonFavorite() called with: city = $cityLocal")
         return !cityFavoriteClick
     }
 
+    fun getCityFavorite(city: City): Boolean {
+//        return city.favorite
+        return cityRepositoryImpl.getCityCondition(city)[0].favorite
+    }
+
     fun stateCityFavoriteNote(city: City): City {
         return cityRepositoryImpl.getCityCondition(city)[0]
     }
 
-    fun updateCityNote(city: City, cityNote: String) {
-        val cityLocal = City(city.city, city.lat, city.lat, city.favorite, cityNote)
+    fun updateCityFavoriteNote(city: City, favorite: Boolean, cityNote: String) {
+
+        val cityLocal = City(city.city, city.lat, city.lat, favorite, cityNote)
         cityRepositoryImpl.updateCityCondition(cityLocal)
+        Log.d(TAG, "updateCity: cityFavorite = $favorite, cityNote = $cityNote")
     }
+//    fun findCity(cityName: String) :City{
+//        return
+//    }
 }
