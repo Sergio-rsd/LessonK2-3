@@ -1,6 +1,5 @@
 package ru.gb.kotlinapp.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
@@ -23,8 +22,6 @@ class DetailsViewModel(
     private val detailsRepositoryImpl: DetailsRepository = DetailsRepositoryImpl(RemoteDataSource()),
     private val historyRepositoryImpl: LocalRepositoryImpl = LocalRepositoryImpl(getHistoryDao()),
     private val cityRepositoryImpl: LocalRepoCityImpl = LocalRepoCityImpl(getHistoryDao())
-    // TODO удалить
-//    private var buttonClickFavoriteListener: DetailsFragment.ClickButtonFavoriteListener?
 ) : ViewModel(), DetailsFragment.ClickButtonFavoriteListener {
 
     private val callBack = object : Callback<WeatherDTO> {
@@ -61,18 +58,26 @@ class DetailsViewModel(
         detailsRepositoryImpl.getWeatherDetailsFromServer(lat, lon, callBack)
     }
 
-        override fun clickButtonFavorite(city: City): Boolean {
-//    override fun clickButtonFavorite(city: City) {
-//        val cityFavoriteClick = cityRepositoryImpl.getCityCondition(city)[0].favorite
-        val cityFavoriteClick = getCityFavorite(city)
-        val cityLocal = City(city.city, city.lat, city.lat, !cityFavoriteClick, city.note)
-        cityRepositoryImpl.updateCityCondition(cityLocal)
-//        Log.d(TAG, "clickButtonFavorite() called with: city = $cityLocal")
+    override fun clickButtonFavorite(city: City): Boolean {
+//        val cityLocal = City(city.city, city.lat, city.lat, !cityFavoriteClick, city.note, city.region)
+//            City(city.city, city.lat, city.lat, !cityFavoriteClick, city.note, city.region)
+//        val cityFavoriteClick = getCityFavorite(city)
+
+        val cityLocal = stateCityFavoriteNote(city)
+        val cityFavoriteClick = cityLocal.favorite
+        val cityUpdate = City(
+            cityLocal.city,
+            cityLocal.lat,
+            cityLocal.lon,
+            !cityFavoriteClick,
+            cityLocal.note,
+            cityLocal.region
+        )
+        cityRepositoryImpl.updateCityCondition(cityUpdate)
         return !cityFavoriteClick
     }
 
     fun getCityFavorite(city: City): Boolean {
-//        return city.favorite
         return cityRepositoryImpl.getCityCondition(city)[0].favorite
     }
 
@@ -81,12 +86,16 @@ class DetailsViewModel(
     }
 
     fun updateCityFavoriteNote(city: City, favorite: Boolean, cityNote: String) {
-
-        val cityLocal = City(city.city, city.lat, city.lat, favorite, cityNote)
-        cityRepositoryImpl.updateCityCondition(cityLocal)
-        Log.d(TAG, "updateCity: cityFavorite = $favorite, cityNote = $cityNote")
+        val cityLocal = stateCityFavoriteNote(city)
+        val cityUpdate = City(
+            cityLocal.city,
+            cityLocal.lat,
+            cityLocal.lon,
+            favorite,
+            cityNote,
+            cityLocal.region
+        )
+//        val cityUpdate = City(city.city, city.lat, city.lat, favorite, cityNote, city.region)
+        cityRepositoryImpl.updateCityCondition(cityUpdate)
     }
-//    fun findCity(cityName: String) :City{
-//        return
-//    }
 }

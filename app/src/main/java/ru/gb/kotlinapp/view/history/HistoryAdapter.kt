@@ -24,7 +24,6 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolde
                 itemView.apply {
                     findViewById<TextView>(R.id.recyclerViewItem).text =
                         String.format(
-//                            "%s %d %s",
                             context.getString(R.string.item_history),
                             data.city.city,
                             data.temperature.toString(),

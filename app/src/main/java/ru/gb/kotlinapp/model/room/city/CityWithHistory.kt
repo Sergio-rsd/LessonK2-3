@@ -5,5 +5,6 @@ data class CityWithHistory(
     val temperature: Int = 0,
     val condition: String = "",
     val favorite: Boolean = false,
-    val note : String = ""
+    val note: String = "",
+    val region: String = ""
 )

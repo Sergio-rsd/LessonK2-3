@@ -7,7 +7,8 @@ import ru.gb.kotlinapp.model.room.city.CityWithHistory
 @Dao
 interface HistoryDao {
     @Transaction
-    @Query("SELECT CityEntity.city, HistoryEntity.temperature, HistoryEntity.condition, CityEntity.favorite, CityEntity.note " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
+    @Query("SELECT CityEntity.city, HistoryEntity.temperature, HistoryEntity.condition, CityEntity.favorite, CityEntity.note, CityEntity.region " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
+//    @Query("SELECT * " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
     fun all(): List<CityWithHistory>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -31,4 +32,7 @@ interface HistoryDao {
 
     @Update
     fun updateCity(entity: CityEntity)
+
+    @Query("SELECT * FROM CityEntity WHERE region = :region")
+    fun getCitiesOnRegion(region: String): List<CityEntity>
 }

@@ -35,3 +35,17 @@ fun View.showSnackBarStringText(
         .setAction(actionText, action)
         .show()
 }
+
+// Отображать вью в зависимости от условия
+inline fun View.showIf(condition: () -> Boolean) : View {
+    if (visibility != View.VISIBLE && condition()) {
+        visibility = View.VISIBLE
+    }
+    return this
+}
+inline fun View.hideIf(predicate: () -> Boolean) : View {
+    if (visibility != View.GONE && predicate()) {
+        visibility = View.GONE
+    }
+    return this
+}

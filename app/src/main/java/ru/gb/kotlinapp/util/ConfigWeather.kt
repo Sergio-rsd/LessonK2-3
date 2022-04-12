@@ -13,6 +13,8 @@ const val SHARE_PREF = "/shared_prefs/"
 const val SUFFIX_XML = ".xml"
 const val EXIST_CITY = "EXIST_CITY"
 const val ADD_CITY = "CONTROL_CITY"
+const val REGION_RU = "RU"
+const val REGION_WORLD = "WORLD"
 
 data class ConfigWeather(
     val DEBUG: Boolean = true

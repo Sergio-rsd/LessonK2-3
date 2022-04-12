@@ -9,5 +9,6 @@ data class City(
     val lat: Double,
     val lon: Double,
     val favorite: Boolean,
-    val note: String
+    val note: String,
+    val region: String
 ) : Parcelable

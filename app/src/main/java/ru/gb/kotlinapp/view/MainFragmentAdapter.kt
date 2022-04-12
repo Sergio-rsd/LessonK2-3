@@ -4,12 +4,19 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ru.gb.kotlinapp.App
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.model.Weather
+import ru.gb.kotlinapp.model.repository.room.city.LocalRepoCityImpl
+import ru.gb.kotlinapp.util.showIf
 
-class MainFragmentAdapter(private var onItemViewClickListener: OnItemViewClickListener?) :
+class MainFragmentAdapter(
+    private var onItemViewClickListener: OnItemViewClickListener?,
+//    private val cityRepositoryImpl: LocalRepoCityImpl = LocalRepoCityImpl(App.getHistoryDao())
+) :
     RecyclerView.Adapter<MainFragmentAdapter.MainViewHolder>() {
 
     private var weatherData: List<Weather> = listOf()
@@ -30,6 +37,9 @@ class MainFragmentAdapter(private var onItemViewClickListener: OnItemViewClickLi
             itemView.apply {
                 findViewById<TextView>(R.id.mainFragmentRecyclerItemTextView).text =
                     weather.city.city
+
+                findViewById<ImageView>(R.id.favoriteIconMain).showIf { weather.city.favorite }
+
                 setOnClickListener {
                     onItemViewClickListener?.onItemViewClick(weather)
                 }

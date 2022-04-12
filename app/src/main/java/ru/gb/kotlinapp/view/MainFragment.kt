@@ -187,7 +187,7 @@ class MainFragment : Fragment() {
         for (cityItem in getRussianCities()) {
             cityList.add(cityItem.city)
         }
-        cityList.add(getDefaultCity())
+//        cityList.add(getDefaultCity())
 
         return cityList
     }

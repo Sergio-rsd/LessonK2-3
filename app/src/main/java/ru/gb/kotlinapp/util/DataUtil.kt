@@ -56,7 +56,19 @@ fun checkDTOtoNull(serverResponse: WeatherDTO): Boolean {
 
 fun convertHistoryEntityToWeather(entityList: List<CityWithHistory>): List<Weather> {
     return entityList.map {
-        Weather(City(it.city, 0.0, 0.0, it.favorite, it.note), it.temperature, 0, it.condition)
+        Weather(
+            City(it.city, 0.0, 0.0, it.favorite, it.note, it.region),
+            it.temperature,
+            0,
+            it.condition
+        )
+    }
+}
+
+fun convertCityOfRegionToWeather(cityRegion: List<City>): List<Weather> {
+    return cityRegion.map {
+//        Weather(City(it.city,0.0, 0.0, it.favorite, it.note, it.region), it.temperature, 0, it.condition)
+        Weather(City(it.city, it.lat, it.lon, it.favorite, it.note, it.region),0,0,"")
     }
 }
 
@@ -66,14 +78,14 @@ fun convertWeatherToEntity(weather: Weather, city: List<CityEntity>): HistoryEnt
 
 fun convertCityEntityToView(entityCity: List<CityEntity>): List<City> {
     return entityCity.map {
-        City(it.city, 0.0, 0.0, it.favorite, it.note)
+        City(it.city, it.lat, it.lon, it.favorite, it.note, it.region)
     }
 }
 
 fun convertCityToEntity(city: City, cityId: Long): CityEntity {
-    return CityEntity(cityId, city.city, city.favorite, city.note)
+    return CityEntity(cityId, city.city, city.lat, city.lon, city.favorite, city.note, city.region)
 }
 
 fun convertCityToEntityInsert(city: City): CityEntity {
-    return CityEntity(0, city.city, city.favorite, city.note)
+    return CityEntity(0, city.city, city.lat, city.lon, city.favorite, city.note, city.region)
 }

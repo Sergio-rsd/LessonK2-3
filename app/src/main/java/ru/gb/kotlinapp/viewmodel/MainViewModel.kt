@@ -7,6 +7,8 @@ import ru.gb.kotlinapp.model.City
 import ru.gb.kotlinapp.model.Repository
 import ru.gb.kotlinapp.model.RepositoryImpl
 import ru.gb.kotlinapp.model.repository.room.city.LocalRepoCityImpl
+import ru.gb.kotlinapp.util.REGION_RU
+import ru.gb.kotlinapp.util.REGION_WORLD
 
 class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
@@ -27,9 +29,11 @@ class MainViewModel(
             liveDataToObserve.postValue(
                 AppState.Success(
                     if (isRussian)
-                        repositoryImpl.getWeatherFromLocalStorageRus()
+//                        repositoryImpl.getWeatherFromLocalStorageRus()
+                        cityRepoImpl.getCityRegion(REGION_RU)
                     else
-                        repositoryImpl.getWeatherFromLocalStorageWorld()
+//                        repositoryImpl.getWeatherFromLocalStorageWorld()
+                        cityRepoImpl.getCityRegion(REGION_WORLD)
                 )
             )
         }.start()

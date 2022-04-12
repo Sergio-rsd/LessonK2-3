@@ -38,7 +38,6 @@
                     android:textSize="@dimen/recycler_item_text_size"
                     android:textStyle="bold"
                     tools:text="Москва" />
-                <!--android:layout_marginBottom="@dimen/recycler_item_padding"-->
                 <ImageView
                     android:id="@+id/favoriteIcon"
                     android:layout_width="20dp"
