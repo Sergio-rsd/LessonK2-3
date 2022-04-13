@@ -98,7 +98,9 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         with(binding) {
             cityName.text = city.city
 
-            saveCity(city, weather)
+//            saveCity(city, weather)
+            saveCity(cityState, weather)
+
             if (cityState.favorite) {
                 favoriteIcon.visibility = View.VISIBLE
             } else {

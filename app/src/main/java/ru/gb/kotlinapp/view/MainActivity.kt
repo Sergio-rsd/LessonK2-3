@@ -10,6 +10,7 @@ import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.MainActivityBinding
 import ru.gb.kotlinapp.util.MainBroadcastReceiver
 import ru.gb.kotlinapp.view.history.HistoryFragment
+import ru.gb.kotlinapp.view.setting.SettingFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
@@ -47,9 +48,20 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.apply {
                     beginTransaction()
                         .add(R.id.container, HistoryFragment.newInstance())
+//                        .replace(R.id.container, HistoryFragment.newInstance())
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }
+                true
+            }
+            R.id.menu_favorite -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .add(R.id.container, SettingFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                // TODO doing
                 true
             }
             else -> super.onOptionsItemSelected(item)

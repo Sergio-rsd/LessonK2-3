@@ -15,6 +15,10 @@ const val EXIST_CITY = "EXIST_CITY"
 const val ADD_CITY = "CONTROL_CITY"
 const val REGION_RU = "RU"
 const val REGION_WORLD = "WORLD"
+// зафиксировать выбор только любимых городов
+const val FAVORITE_STATE = "FAVORITE_STATE"
+const val IS_FAVORITE_STATE = "IS_FAVORITE_STATE"
+
 
 data class ConfigWeather(
     val DEBUG: Boolean = true

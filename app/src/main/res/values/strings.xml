@@ -31,5 +31,7 @@
     <string name="item_history">%s, %s°, %s </string>
     <string name="favorite_text_button">Сделать Любимым</string>
     <string name="note">Заметка</string>
+    <string name="menu_title_favorite">favorite</string>
+    <string name="show_loved_city">Показать любимые города</string>
 
 </resources>

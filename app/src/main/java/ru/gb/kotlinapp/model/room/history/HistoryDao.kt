@@ -8,7 +8,6 @@ import ru.gb.kotlinapp.model.room.city.CityWithHistory
 interface HistoryDao {
     @Transaction
     @Query("SELECT CityEntity.city, HistoryEntity.temperature, HistoryEntity.condition, CityEntity.favorite, CityEntity.note, CityEntity.region " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
-//    @Query("SELECT * " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
     fun all(): List<CityWithHistory>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

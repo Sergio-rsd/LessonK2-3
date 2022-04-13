@@ -42,6 +42,9 @@ class MainFragment : Fragment() {
                     .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
                         putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
                     }))
+//                    .replace(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+//                        putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
+//                    }))
                     .addToBackStack("")
                     .commitAllowingStateLoss()
             }
@@ -187,7 +190,6 @@ class MainFragment : Fragment() {
         for (cityItem in getRussianCities()) {
             cityList.add(cityItem.city)
         }
-//        cityList.add(getDefaultCity())
 
         return cityList
     }

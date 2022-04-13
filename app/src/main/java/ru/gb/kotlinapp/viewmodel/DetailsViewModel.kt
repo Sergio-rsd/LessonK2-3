@@ -59,9 +59,6 @@ class DetailsViewModel(
     }
 
     override fun clickButtonFavorite(city: City): Boolean {
-//        val cityLocal = City(city.city, city.lat, city.lat, !cityFavoriteClick, city.note, city.region)
-//            City(city.city, city.lat, city.lat, !cityFavoriteClick, city.note, city.region)
-//        val cityFavoriteClick = getCityFavorite(city)
 
         val cityLocal = stateCityFavoriteNote(city)
         val cityFavoriteClick = cityLocal.favorite
@@ -95,7 +92,6 @@ class DetailsViewModel(
             cityNote,
             cityLocal.region
         )
-//        val cityUpdate = City(city.city, city.lat, city.lat, favorite, cityNote, city.region)
         cityRepositoryImpl.updateCityCondition(cityUpdate)
     }
 }
