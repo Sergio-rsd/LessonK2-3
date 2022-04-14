@@ -18,22 +18,43 @@ class MainViewModel(
 
     fun getLiveData() = liveDataToObserve
 
-    fun getWeatherFromRemoteSource() = getDataFromLocalSource(isRussian = true)
+//    fun getWeatherFromRemoteSource() = getDataFromLocalSource(isRussian = true)
 
-    fun getWeatherFromLocalSourceRus() = getDataFromLocalSource(isRussian = true)
-    fun getWeatherFromLocalSourceWorld() = getDataFromLocalSource(isRussian = false)
+    fun getWeatherFromLocalSourceRus() =
+        getDataFromLocalSource(isRussian = true, isFavorite = false)
 
-    private fun getDataFromLocalSource(isRussian: Boolean) {
+    fun getWeatherFromLocalSourceRusFavorite() =
+        getDataFromLocalSource(isRussian = true, isFavorite = true)
+
+    fun getWeatherFromLocalSourceWorld() =
+        getDataFromLocalSource(isRussian = false, isFavorite = false)
+
+    fun getWeatherFromLocalSourceWorldFavorite() =
+        getDataFromLocalSource(isRussian = false, isFavorite = true)
+
+    private fun getDataFromLocalSource(isRussian: Boolean, isFavorite: Boolean) {
+        /*
+        var favoriteState: Boolean = false
+        val isFavoriteState =
+            context().getSharedPreferences(FAVORITE_STATE, Context.MODE_PRIVATE)
+                .getBoolean(IS_FAVORITE_STATE, favoriteState)
+*/
         liveDataToObserve.value = AppState.Loading
         Thread {
             liveDataToObserve.postValue(
                 AppState.Success(
                     if (isRussian)
 //                        repositoryImpl.getWeatherFromLocalStorageRus()
-                        cityRepoImpl.getCityRegion(REGION_RU)
+                        if (isFavorite)
+                            cityRepoImpl.getCityRegionFavorite(REGION_RU)
+                        else
+                            cityRepoImpl.getCityRegion(REGION_RU)
                     else
 //                        repositoryImpl.getWeatherFromLocalStorageWorld()
-                        cityRepoImpl.getCityRegion(REGION_WORLD)
+                        if (isFavorite)
+                            cityRepoImpl.getCityRegionFavorite(REGION_WORLD)
+                        else
+                            cityRepoImpl.getCityRegion(REGION_WORLD)
                 )
             )
         }.start()

@@ -10,7 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.MainFragmentBinding
-import ru.gb.kotlinapp.model.*
+import ru.gb.kotlinapp.model.City
+import ru.gb.kotlinapp.model.Weather
+import ru.gb.kotlinapp.model.getRussianCities
+import ru.gb.kotlinapp.model.getWorldCities
 import ru.gb.kotlinapp.util.*
 import ru.gb.kotlinapp.view.details.DetailsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
@@ -42,9 +45,6 @@ class MainFragment : Fragment() {
                     .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
                         putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
                     }))
-//                    .replace(R.id.container, DetailsFragment.newInstance(Bundle().apply {
-//                        putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
-//                    }))
                     .addToBackStack("")
                     .commitAllowingStateLoss()
             }
@@ -88,17 +88,29 @@ class MainFragment : Fragment() {
             ) {
                 changeWeatherDataSet()
             } else {
-                viewModel.getWeatherFromLocalSourceRus()
+                if (showFavoriteCities() == true) {
+                    viewModel.getWeatherFromLocalSourceRusFavorite()
+                } else {
+                    viewModel.getWeatherFromLocalSourceRus()
+                }
             }
         }
     }
 
     private fun changeWeatherDataSet() {
         if (isDataSetRus) {
-            viewModel.getWeatherFromLocalSourceWorld()
+            if (showFavoriteCities() == true) {
+                viewModel.getWeatherFromLocalSourceWorldFavorite()
+            } else {
+                viewModel.getWeatherFromLocalSourceWorld()
+            }
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
         } else {
-            viewModel.getWeatherFromLocalSourceRus()
+            if(showFavoriteCities() == true){
+                viewModel.getWeatherFromLocalSourceRusFavorite()
+            }else{
+                viewModel.getWeatherFromLocalSourceRus()
+            }
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
         }.also { isDataSetRus = !isDataSetRus }
         saveListOfTowns()
@@ -192,5 +204,13 @@ class MainFragment : Fragment() {
         }
 
         return cityList
+    }
+
+    private fun showFavoriteCities(): Boolean? {
+        val favoriteState = false
+        return activity?.let {
+            it.getSharedPreferences(FAVORITE_STATE, Context.MODE_PRIVATE)
+                .getBoolean(IS_FAVORITE_STATE, favoriteState)
+        }
     }
 }

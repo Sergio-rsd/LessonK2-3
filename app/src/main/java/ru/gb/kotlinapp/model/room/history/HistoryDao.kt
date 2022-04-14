@@ -32,6 +32,9 @@ interface HistoryDao {
     @Update
     fun updateCity(entity: CityEntity)
 
-    @Query("SELECT * FROM CityEntity WHERE region = :region")
+    @Query("SELECT * FROM CityEntity WHERE region LIKE :region " + "ORDER BY city")
     fun getCitiesOnRegion(region: String): List<CityEntity>
+
+    @Query("SELECT * FROM CityEntity WHERE region LIKE :region AND favorite = 1 " + "ORDER BY city")
+    fun getCitiesRegionFavorite(region: String): List<CityEntity>
 }

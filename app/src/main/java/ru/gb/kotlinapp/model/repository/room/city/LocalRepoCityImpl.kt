@@ -3,7 +3,10 @@ package ru.gb.kotlinapp.model.repository.room.city
 import ru.gb.kotlinapp.model.City
 import ru.gb.kotlinapp.model.Weather
 import ru.gb.kotlinapp.model.room.history.HistoryDao
-import ru.gb.kotlinapp.util.*
+import ru.gb.kotlinapp.util.convertCityEntityToView
+import ru.gb.kotlinapp.util.convertCityOfRegionToWeather
+import ru.gb.kotlinapp.util.convertCityToEntity
+import ru.gb.kotlinapp.util.convertCityToEntityInsert
 
 class LocalRepoCityImpl(private val localCitySource: HistoryDao) : LocalRepoCity {
     override fun saveCity(city: City) {
@@ -27,6 +30,12 @@ class LocalRepoCityImpl(private val localCitySource: HistoryDao) : LocalRepoCity
     override fun getCityRegion(region: String): List<Weather> {
         val citiesOfRegion = convertCityEntityToView(localCitySource.getCitiesOnRegion(region))
         return convertCityOfRegionToWeather(citiesOfRegion)
+    }
+
+    override fun getCityRegionFavorite(region: String): List<Weather> {
+        val citiesOfRegionFavorite =
+            convertCityEntityToView(localCitySource.getCitiesRegionFavorite(region))
+        return convertCityOfRegionToWeather(citiesOfRegionFavorite)
     }
 
     override fun getAllCity(): List<City> {

@@ -52,6 +52,10 @@ class SettingFragment : Fragment() {
             }
         }
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     private fun loadFavoriteState(@SuppressLint("UseSwitchCompatOrMaterialCode") toggleFavorite: Switch) {
         activity?.let {
