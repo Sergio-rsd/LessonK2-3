@@ -18,6 +18,7 @@ class App : Application() {
         private const val DB_NAME = "History.db"
 
         fun getHistoryDao(): HistoryDao {
+
             synchronized(HistoryDataBase::class.java) {
                 if (db == null) {
 //                    synchronized(HistoryDataBase::class.java) {
@@ -28,7 +29,7 @@ class App : Application() {
                         DB_NAME
                     )
                             // TODO потоки!!!!
-                        .allowMainThreadQueries()
+//                        .allowMainThreadQueries()
                         .build()
                 }
             }

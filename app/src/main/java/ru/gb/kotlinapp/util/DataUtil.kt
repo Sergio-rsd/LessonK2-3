@@ -67,7 +67,7 @@ fun convertHistoryEntityToWeather(entityList: List<CityWithHistory>): List<Weath
 
 fun convertCityOfRegionToWeather(cityRegion: List<City>): List<Weather> {
     return cityRegion.map {
-        Weather(City(it.city, it.lat, it.lon, it.favorite, it.note, it.region),0,0,"")
+        Weather(City(it.city, it.lat, it.lon, it.favorite, it.note, it.region), 0, 0, "")
     }
 }
 

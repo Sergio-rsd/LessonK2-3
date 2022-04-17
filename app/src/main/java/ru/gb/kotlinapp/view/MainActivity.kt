@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }
-                // TODO doing
                 true
             }
             else -> super.onOptionsItemSelected(item)

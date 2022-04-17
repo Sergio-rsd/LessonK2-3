@@ -61,6 +61,9 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        val managerWork = WorkManager.getInstance(requireContext())
+
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
 
@@ -106,9 +109,9 @@ class MainFragment : Fragment() {
             }
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
         } else {
-            if(showFavoriteCities() == true){
+            if (showFavoriteCities() == true) {
                 viewModel.getWeatherFromLocalSourceRusFavorite()
-            }else{
+            } else {
                 viewModel.getWeatherFromLocalSourceRus()
             }
             binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)

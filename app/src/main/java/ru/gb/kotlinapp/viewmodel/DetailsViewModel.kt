@@ -79,6 +79,10 @@ class DetailsViewModel(
     }
 
     fun stateCityFavoriteNote(city: City): City {
+        // TODO потоки!!!
+        Thread{
+//            detailsLiveData.postValue(AppState.Success())
+        }.start()
         return cityRepositoryImpl.getCityCondition(city)[0]
     }
 

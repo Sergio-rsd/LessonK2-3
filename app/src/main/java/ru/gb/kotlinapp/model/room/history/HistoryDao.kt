@@ -1,5 +1,6 @@
 package ru.gb.kotlinapp.model.room.history
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import ru.gb.kotlinapp.model.room.city.CityEntity
 import ru.gb.kotlinapp.model.room.city.CityWithHistory

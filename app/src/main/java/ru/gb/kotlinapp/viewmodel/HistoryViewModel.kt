@@ -10,9 +10,12 @@ class HistoryViewModel(
     private val historyRepositoryImpl: LocalRepositoryImpl = LocalRepositoryImpl(App.getHistoryDao())
 ) : ViewModel() {
 
-    // TODO -> потоки!!!!!!
     fun getAllHistoryQuery() {
-        historyLiveData.value = AppState.Loading
-        historyLiveData.value = AppState.Success(historyRepositoryImpl.getAllHistory())
+        Thread {
+//            historyLiveData.value = AppState.Loading
+//            historyLiveData.value = AppState.Success(historyRepositoryImpl.getAllHistory())
+            historyLiveData.postValue(AppState.Loading)
+            historyLiveData.postValue(AppState.Success(historyRepositoryImpl.getAllHistory()))
+        }.start()
     }
 }

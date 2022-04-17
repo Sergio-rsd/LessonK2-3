@@ -33,12 +33,6 @@ class MainViewModel(
         getDataFromLocalSource(isRussian = false, isFavorite = true)
 
     private fun getDataFromLocalSource(isRussian: Boolean, isFavorite: Boolean) {
-        /*
-        var favoriteState: Boolean = false
-        val isFavoriteState =
-            context().getSharedPreferences(FAVORITE_STATE, Context.MODE_PRIVATE)
-                .getBoolean(IS_FAVORITE_STATE, favoriteState)
-*/
         liveDataToObserve.value = AppState.Loading
         Thread {
             liveDataToObserve.postValue(

@@ -2,7 +2,6 @@ package ru.gb.kotlinapp.view.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,9 +50,7 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     }
 
     interface ClickButtonFavoriteListener {
-        //        fun clickButtonFavorite(view: View)
         fun clickButtonFavorite(city: City): Boolean
-//        fun clickButtonFavorite(city: City)
     }
 
     private fun renderDataWeather(appState: AppState) {
