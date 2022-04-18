@@ -38,13 +38,11 @@ class MainViewModel(
             liveDataToObserve.postValue(
                 AppState.Success(
                     if (isRussian)
-//                        repositoryImpl.getWeatherFromLocalStorageRus()
                         if (isFavorite)
                             cityRepoImpl.getCityRegionFavorite(REGION_RU)
                         else
                             cityRepoImpl.getCityRegion(REGION_RU)
                     else
-//                        repositoryImpl.getWeatherFromLocalStorageWorld()
                         if (isFavorite)
                             cityRepoImpl.getCityRegionFavorite(REGION_WORLD)
                         else

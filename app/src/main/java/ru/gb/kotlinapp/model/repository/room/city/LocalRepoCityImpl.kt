@@ -39,6 +39,6 @@ class LocalRepoCityImpl(private val localCitySource: HistoryDao) : LocalRepoCity
     }
 
     override fun getAllCity(): List<City> {
-        TODO("Not yet implemented")
+        TODO("Заглушка для добавления города")
     }
 }

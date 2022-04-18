@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.apply {
                     beginTransaction()
                         .add(R.id.container, HistoryFragment.newInstance())
-//                        .replace(R.id.container, HistoryFragment.newInstance())
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }

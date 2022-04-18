@@ -12,8 +12,6 @@ class HistoryViewModel(
 
     fun getAllHistoryQuery() {
         Thread {
-//            historyLiveData.value = AppState.Loading
-//            historyLiveData.value = AppState.Success(historyRepositoryImpl.getAllHistory())
             historyLiveData.postValue(AppState.Loading)
             historyLiveData.postValue(AppState.Success(historyRepositoryImpl.getAllHistory()))
         }.start()

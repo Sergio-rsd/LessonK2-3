@@ -2,6 +2,7 @@ package ru.gb.kotlinapp.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ class MainFragment : Fragment() {
         ViewModelProvider(this)[MainViewModel::class.java]
     }
     private var isDataSetRus: Boolean = true
+    private val myTreadHandler = MyThread()
 
     companion object {
         fun newInstance() = MainFragment()
@@ -61,8 +63,6 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        val managerWork = WorkManager.getInstance(requireContext())
 
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
@@ -123,6 +123,7 @@ class MainFragment : Fragment() {
         super.onDestroyView()
         adapter.removeListener()
         _binding = null
+        myTreadHandler.handler?.removeCallbacksAndMessages(null)
     }
 
     private fun renderData(appState: AppState) {
@@ -130,9 +131,7 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 appState.weatherData
                 binding.mainFragmentLoadingLayout.visibility = View.GONE
-// TODO Thread
                 adapter.setWeather(appState.weatherData)
-//                adapter.setWeather(appState.weatherData as List<Weather>)
             }
             is AppState.Loading -> {
                 binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
@@ -152,10 +151,12 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        myTreadHandler.start()
         checkingCitiesOnLoadOrAdd()
     }
 
     private fun checkingCitiesOnLoadOrAdd() {
+
         if (!preferenceFileExist(CITY_EXIST)) {
             activity?.let {
                 with(
@@ -167,12 +168,15 @@ class MainFragment : Fragment() {
                 }
             }
 //  скопировать из базы в Entity города после первого запуска после установки
-            val cityList: MutableList<City> = gatherCities()
-            for (city in cityList) {
-                viewModel.saveCityToEntity(city)
+
+            myTreadHandler.handler?.post {
+                val cityList: MutableList<City> = gatherCities()
+                for (city in cityList) {
+                    viewModel.saveCityToEntity(city)
+                }
             }
         } else {
-// проверка на совпадение городов в Weather и в базе Entity
+// проверка на совпадение городов в Weather и в базе Entity - при добавлении города в приложении - заглушка
             activity?.let {
                 with(
                     it.getSharedPreferences(CITY_EXIST, Context.MODE_PRIVATE)
@@ -183,12 +187,14 @@ class MainFragment : Fragment() {
                 }
             }
         }
-        /*
-         val cityList: MutableList<City> = gatherCities()
-         for (city in cityList) {
-             viewModel.saveCityToEntity(city)
-         }
-         */
+/*
+        myTreadHandler.handler?.post {
+            val cityList: MutableList<City> = gatherCities()
+            for (city in cityList) {
+                viewModel.saveCityToEntity(city)
+            }
+        }
+        */
     }
 
     private fun preferenceFileExist(fileName: String): Boolean {
@@ -207,7 +213,6 @@ class MainFragment : Fragment() {
         for (cityItem in getRussianCities()) {
             cityList.add(cityItem.city)
         }
-
         return cityList
     }
 

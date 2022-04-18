@@ -51,13 +51,7 @@ class DetailsViewModel(
     }
 
     fun saveCityToDB(weather: Weather) {
-
-        Thread {
-            historyRepositoryImpl.saveEntity(weather)
-        }.start()
-
-        //TODO Thread
-//        historyRepositoryImpl.saveEntity(weather)
+        historyRepositoryImpl.saveEntity(weather)
     }
 
     fun getWeatherFromRemoteSource(lat: Double, lon: Double) {
@@ -82,29 +76,10 @@ class DetailsViewModel(
     }
 
     fun getCityFavorite(city: City): Boolean {
-        // TODO потоки!!!
-
         return cityRepositoryImpl.getCityCondition(city)[0].favorite
     }
 
     fun stateCityFavoriteNote(city: City): City {
-/*
-
-        // TODO потоки!!!
-        val cityLocal = LinkedBlockingQueue<City>()
-        Thread {
-            val cityState: City = cityRepositoryImpl.getCityCondition(city)[0]
-
-//            detailsLiveData.postValue(AppState.Success(cityState))
-            cityLocal.add(cityState)
-//            detailsLiveData.postValue(AppState.Loading)
-//            return@Thread cityState
-        }.start()
-//        return cityState
-        return cityLocal.take()
-*/
-
-
         return cityRepositoryImpl.getCityCondition(city)[0]
     }
 

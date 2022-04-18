@@ -7,17 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ru.gb.kotlinapp.App
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.model.Weather
-import ru.gb.kotlinapp.model.repository.room.city.LocalRepoCityImpl
 import ru.gb.kotlinapp.util.showIf
 
 class MainFragmentAdapter(
     private var onItemViewClickListener: OnItemViewClickListener?,
-//    private val cityRepositoryImpl: LocalRepoCityImpl = LocalRepoCityImpl(App.getHistoryDao())
-) :
-    RecyclerView.Adapter<MainFragmentAdapter.MainViewHolder>() {
+) : RecyclerView.Adapter<MainFragmentAdapter.MainViewHolder>() {
 
     private var weatherData: List<Weather> = listOf()
 

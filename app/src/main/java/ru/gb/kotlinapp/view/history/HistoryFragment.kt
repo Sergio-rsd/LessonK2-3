@@ -48,8 +48,6 @@ class HistoryFragment : Fragment() {
                     historyFragmentRecyclerview.visibility = View.VISIBLE
                     loadingLayout.visibility = View.GONE
                 }
-                // TODO Thread
-//                adapter.setData(appState.weatherData as List<Weather>)
                 adapter.setData(appState.weatherData)
             }
             is AppState.Loading -> {

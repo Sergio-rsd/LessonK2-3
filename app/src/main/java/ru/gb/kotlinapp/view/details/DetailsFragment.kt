@@ -24,7 +24,6 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     private var _binding: FragmentWeatherCityBinding? = null
     private val binding get() = _binding!!
 
-    //    private val handlerThread : HandlerThread? = null
     private val myTreadHandler = MyThread()
 
     private lateinit var weatherBundle: Weather
@@ -67,11 +66,7 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                     mainViewWeather.visibility = View.VISIBLE
                     loadingLayout.visibility = View.GONE
                 }
-                // TODO thread
                 setWeather(appState.weatherData[0])
-//                val renderWeather = appState.weatherData as List<Weather>
-//                setWeather(renderWeather[0] as Weather)
-//                setWeather(appState.weatherData as Weather)
             }
             is AppState.Loading -> {
                 with(binding) {
@@ -101,18 +96,15 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     private fun setWeather(weather: Weather) {
         val city = weatherBundle.city
 
-
-//        val cityState = viewModel.stateCityFavoriteNote(city)
-
         with(binding) {
             cityName.text = city.city
 
             myTreadHandler.handler?.post {
                 val cityState = viewModel.stateCityFavoriteNote(city)
+                saveCity(cityState, weather)
                 requireActivity().let {
-                    Handler(Looper.getMainLooper()).post{
-//                        val cityState = cityStateDao
-                        saveCity(cityState, weather)
+                    Handler(Looper.getMainLooper()).post {
+//                        saveCity(cityState, weather)
                         if (cityState.favorite) {
                             favoriteIcon.visibility = View.VISIBLE
                         } else {
@@ -122,15 +114,7 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                     }
                 }
             }
-//            saveCity(city, weather)
-//            saveCity(cityState, weather)
-/*
-            if (cityState.favorite) {
-                favoriteIcon.visibility = View.VISIBLE
-            } else {
-                favoriteIcon.visibility = View.GONE
-            }
-            */
+
             currentTimeData.text = String.format(
                 getString(R.string.current_time_data),
                 SimpleDateFormat(CURRENT_TIME_DATE).format(Calendar.getInstance().time)
@@ -194,15 +178,8 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                         }
                     }
                 }
-
-//                if (isFavorite) {
-//                    favoriteIcon.visibility = View.VISIBLE
-//                } else {
-//                    favoriteIcon.visibility = View.GONE
-//                }
             }
 
-//            noteCity.setText(noteCityCurrent(cityState))
         }
     }
 
@@ -210,22 +187,20 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         return cityState.note
     }
 
-    override fun onDestroyView() {
+    override fun onStop() {
+        super.onStop()
         val city = weatherBundle.city
+        val cityNote = binding.noteCity.text.toString()
 
         myTreadHandler.handler?.post {
             val cityFavorite = viewModel.getCityFavorite(city)
-            val cityNote = binding.noteCity.text.toString()
             viewModel.updateCityFavoriteNote(city, cityFavorite, cityNote)
         }
+    }
 
-//        val cityFavorite = viewModel.getCityFavorite(city)
-//        val cityNote = binding.noteCity.text.toString()
-//        viewModel.updateCityFavoriteNote(city, cityFavorite, cityNote)
-
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-//        handlerThread?.quitSafely()
         myTreadHandler.handler?.removeCallbacksAndMessages(null)
     }
 
@@ -251,15 +226,6 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
             fragment.arguments = bundle
             return fragment
         }
-    }
-}
-
-class MyThread : Thread() {
-    var handler: Handler? = null
-    override fun run() {
-        Looper.prepare()
-        handler = Handler(Looper.myLooper()!!)
-        Looper.loop()
     }
 }
 
