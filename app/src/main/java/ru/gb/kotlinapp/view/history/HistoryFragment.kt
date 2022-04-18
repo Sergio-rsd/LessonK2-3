@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.FragmentHistoryBinding
+import ru.gb.kotlinapp.model.Weather
 import ru.gb.kotlinapp.util.showSnackBar
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.HistoryViewModel
@@ -47,6 +48,8 @@ class HistoryFragment : Fragment() {
                     historyFragmentRecyclerview.visibility = View.VISIBLE
                     loadingLayout.visibility = View.GONE
                 }
+                // TODO Thread
+//                adapter.setData(appState.weatherData as List<Weather>)
                 adapter.setData(appState.weatherData)
             }
             is AppState.Loading -> {

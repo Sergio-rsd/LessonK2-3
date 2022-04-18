@@ -130,7 +130,9 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 appState.weatherData
                 binding.mainFragmentLoadingLayout.visibility = View.GONE
+// TODO Thread
                 adapter.setWeather(appState.weatherData)
+//                adapter.setWeather(appState.weatherData as List<Weather>)
             }
             is AppState.Loading -> {
                 binding.mainFragmentLoadingLayout.visibility = View.VISIBLE

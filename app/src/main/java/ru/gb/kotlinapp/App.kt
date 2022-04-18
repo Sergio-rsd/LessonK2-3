@@ -21,7 +21,6 @@ class App : Application() {
 
             synchronized(HistoryDataBase::class.java) {
                 if (db == null) {
-//                    synchronized(HistoryDataBase::class.java) {
                     if (appInstance == null) throw IllegalAccessException("APP must not be null")
                     db = Room.databaseBuilder(
                         appInstance!!.applicationContext,

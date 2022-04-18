@@ -2,6 +2,8 @@ package ru.gb.kotlinapp.view.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +24,9 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     private var _binding: FragmentWeatherCityBinding? = null
     private val binding get() = _binding!!
 
+    //    private val handlerThread : HandlerThread? = null
+    private val myTreadHandler = MyThread()
+
     private lateinit var weatherBundle: Weather
 
     private val viewModel: DetailsViewModel by lazy {
@@ -40,6 +45,8 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        myTreadHandler.start()
 
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
 
@@ -60,7 +67,11 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                     mainViewWeather.visibility = View.VISIBLE
                     loadingLayout.visibility = View.GONE
                 }
+                // TODO thread
                 setWeather(appState.weatherData[0])
+//                val renderWeather = appState.weatherData as List<Weather>
+//                setWeather(renderWeather[0] as Weather)
+//                setWeather(appState.weatherData as Weather)
             }
             is AppState.Loading -> {
                 with(binding) {
@@ -90,19 +101,36 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     private fun setWeather(weather: Weather) {
         val city = weatherBundle.city
 
-        val cityState = viewModel.stateCityFavoriteNote(city)
+
+//        val cityState = viewModel.stateCityFavoriteNote(city)
 
         with(binding) {
             cityName.text = city.city
 
+            myTreadHandler.handler?.post {
+                val cityState = viewModel.stateCityFavoriteNote(city)
+                requireActivity().let {
+                    Handler(Looper.getMainLooper()).post{
+//                        val cityState = cityStateDao
+                        saveCity(cityState, weather)
+                        if (cityState.favorite) {
+                            favoriteIcon.visibility = View.VISIBLE
+                        } else {
+                            favoriteIcon.visibility = View.GONE
+                        }
+                        noteCity.setText(noteCityCurrent(cityState))
+                    }
+                }
+            }
 //            saveCity(city, weather)
-            saveCity(cityState, weather)
-
+//            saveCity(cityState, weather)
+/*
             if (cityState.favorite) {
                 favoriteIcon.visibility = View.VISIBLE
             } else {
                 favoriteIcon.visibility = View.GONE
             }
+            */
             currentTimeData.text = String.format(
                 getString(R.string.current_time_data),
                 SimpleDateFormat(CURRENT_TIME_DATE).format(Calendar.getInstance().time)
@@ -155,15 +183,26 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
             headerIcon.load(HEADER_DETAIL_ICON)
 
             favoriteButton.setOnClickListener {
-                val isFavorite = viewModel.clickButtonFavorite(city)
-                if (isFavorite) {
-                    favoriteIcon.visibility = View.VISIBLE
-                } else {
-                    favoriteIcon.visibility = View.GONE
+
+                myTreadHandler.handler?.post {
+                    val isFavorite = viewModel.clickButtonFavorite(city)
+                    it.post {
+                        if (isFavorite) {
+                            favoriteIcon.visibility = View.VISIBLE
+                        } else {
+                            favoriteIcon.visibility = View.GONE
+                        }
+                    }
                 }
+
+//                if (isFavorite) {
+//                    favoriteIcon.visibility = View.VISIBLE
+//                } else {
+//                    favoriteIcon.visibility = View.GONE
+//                }
             }
 
-            noteCity.setText(noteCityCurrent(cityState))
+//            noteCity.setText(noteCityCurrent(cityState))
         }
     }
 
@@ -173,12 +212,21 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
 
     override fun onDestroyView() {
         val city = weatherBundle.city
-        val cityFavorite = viewModel.getCityFavorite(city)
-        val cityNote = binding.noteCity.text.toString()
-        viewModel.updateCityFavoriteNote(city, cityFavorite, cityNote)
+
+        myTreadHandler.handler?.post {
+            val cityFavorite = viewModel.getCityFavorite(city)
+            val cityNote = binding.noteCity.text.toString()
+            viewModel.updateCityFavoriteNote(city, cityFavorite, cityNote)
+        }
+
+//        val cityFavorite = viewModel.getCityFavorite(city)
+//        val cityNote = binding.noteCity.text.toString()
+//        viewModel.updateCityFavoriteNote(city, cityFavorite, cityNote)
 
         super.onDestroyView()
         _binding = null
+//        handlerThread?.quitSafely()
+        myTreadHandler.handler?.removeCallbacksAndMessages(null)
     }
 
     private fun saveCity(
@@ -203,6 +251,15 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
             fragment.arguments = bundle
             return fragment
         }
+    }
+}
+
+class MyThread : Thread() {
+    var handler: Handler? = null
+    override fun run() {
+        Looper.prepare()
+        handler = Handler(Looper.myLooper()!!)
+        Looper.loop()
     }
 }
 
