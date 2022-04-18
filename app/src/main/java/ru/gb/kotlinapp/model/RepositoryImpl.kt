@@ -1,15 +1,8 @@
 package ru.gb.kotlinapp.model
 
 class RepositoryImpl : Repository {
-    override fun getWeatherFromServer(): Weather {
-        return Weather()
-    }
-
-    override fun getWeatherFromLocalStorageRus(): List<Weather> {
-        return getRussianCities()
-    }
-
-    override fun getWeatherFromLocalStorageWorld(): List<Weather> {
-        return getWorldCities()
-    }
+    override fun getWeatherFromServer() = Weather()
+    override fun getWeatherFromLocalStorageRus() = getRussianCities()
+//    override fun getWeatherFromLocalStorageRus() = getAllCity()
+    override fun getWeatherFromLocalStorageWorld() = getWorldCities()
 }
