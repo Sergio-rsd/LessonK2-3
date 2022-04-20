@@ -26,7 +26,9 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
 
     private val myTreadHandler = MyThread()
 
-    private lateinit var weatherBundle: Weather
+    // TODO city
+//    private lateinit var weatherBundle: Weather
+    private lateinit var weatherBundle: City
 
     private val viewModel: DetailsViewModel by lazy {
         ViewModelProvider(this)[DetailsViewModel::class.java]
@@ -46,8 +48,9 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         myTreadHandler.start()
-
-        weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
+        // TODO city
+//        weatherBundle = (arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather())
+        weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: City()
 
         viewModel.detailsLiveData.observe(viewLifecycleOwner) { renderDataWeather(it) }
 
@@ -89,12 +92,16 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     }
 
     private fun requestWeather() {
-        viewModel.getWeatherFromRemoteSource(weatherBundle.city.lat, weatherBundle.city.lon)
+        // TODO city
+//        viewModel.getWeatherFromRemoteSource(weatherBundle.city.lat, weatherBundle.city.lon)
+        viewModel.getWeatherFromRemoteSource(weatherBundle.lat, weatherBundle.lon)
     }
 
     @SuppressLint("SimpleDateFormat")
     private fun setWeather(weather: Weather) {
-        val city = weatherBundle.city
+        // TODO city
+//        val city = weatherBundle.city
+        val city = weatherBundle
 
         with(binding) {
             cityName.text = city.city
@@ -189,10 +196,14 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
 
     override fun onStop() {
         super.onStop()
-        val city = weatherBundle.city
+        // TODO city
+//        val city = weatherBundle.city
+        val city = weatherBundle
         val cityNote = binding.noteCity.text.toString()
 
         myTreadHandler.handler?.post {
+            // TODO city
+//            val cityFavorite = viewModel.getCityFavorite(city)
             val cityFavorite = viewModel.getCityFavorite(city)
             viewModel.updateCityFavoriteNote(city, cityFavorite, cityNote)
         }
@@ -219,7 +230,9 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
     }
 
     companion object {
+        // TODO city
         const val BUNDLE_EXTRA = "weather"
+//        const val BUNDLE_EXTRA = "city"
 
         fun newInstance(bundle: Bundle): DetailsFragment {
             val fragment = DetailsFragment()

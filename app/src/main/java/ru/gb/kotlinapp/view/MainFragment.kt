@@ -18,6 +18,7 @@ import ru.gb.kotlinapp.model.getWorldCities
 import ru.gb.kotlinapp.util.*
 import ru.gb.kotlinapp.view.details.DetailsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
+import ru.gb.kotlinapp.viewmodel.AppStateCity
 import ru.gb.kotlinapp.viewmodel.MainViewModel
 import java.io.File
 
@@ -41,11 +42,15 @@ class MainFragment : Fragment() {
     }
 
     private val adapter = MainFragmentAdapter(object : MainFragmentAdapter.OnItemViewClickListener {
-        override fun onItemViewClick(weather: Weather) {
+        // TODO city
+//        override fun onItemViewClick(weather: Weather) {
+        override fun onItemViewClick(city: City) {
             activity?.supportFragmentManager?.apply {
                 beginTransaction()
                     .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
-                        putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
+                        // TODO city
+//                        putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
+                        putParcelable(DetailsFragment.BUNDLE_EXTRA, city)
                     }))
                     .addToBackStack("")
                     .commitAllowingStateLoss()
@@ -66,8 +71,10 @@ class MainFragment : Fragment() {
 
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
+// TODO city
 
-        val observer = Observer<AppState> {
+//        val observer = Observer<AppState> {
+        val observer = Observer<AppStateCity> {
             renderData(it)
         }
 
@@ -125,18 +132,23 @@ class MainFragment : Fragment() {
         _binding = null
         myTreadHandler.handler?.removeCallbacksAndMessages(null)
     }
+    // TODO city
+//    private fun renderData(appState: AppState) {
+    private fun renderData(appStateCity: AppStateCity) {
+        when (appStateCity) {
+            is AppStateCity.SuccessCity -> {
+                // TODO city
 
-    private fun renderData(appState: AppState) {
-        when (appState) {
-            is AppState.Success -> {
-                appState.weatherData
+//                appState.weatherData
+                appStateCity.cityData
                 binding.mainFragmentLoadingLayout.visibility = View.GONE
-                adapter.setWeather(appState.weatherData)
+//                adapter.setWeather(appState.weatherData)
+                adapter.setWeather(appStateCity.cityData)
             }
-            is AppState.Loading -> {
+            is AppStateCity.LoadingCity -> {
                 binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
             }
-            is AppState.Error -> {
+            is AppStateCity.ErrorCity -> {
                 binding.apply {
                     mainFragmentLoadingLayout.visibility = View.GONE
                     mainFragmentRootView.showSnackBar(

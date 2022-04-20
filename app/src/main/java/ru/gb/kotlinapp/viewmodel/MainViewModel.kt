@@ -11,7 +11,10 @@ import ru.gb.kotlinapp.util.REGION_RU
 import ru.gb.kotlinapp.util.REGION_WORLD
 
 class MainViewModel(
-    private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
+    // TODO city
+
+//    private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
+    private val liveDataToObserve: MutableLiveData<AppStateCity> = MutableLiveData(),
     private val repositoryImpl: Repository = RepositoryImpl(),
     private val cityRepoImpl: LocalRepoCityImpl = LocalRepoCityImpl(App.getHistoryDao())
 ) : ViewModel() {
@@ -33,20 +36,30 @@ class MainViewModel(
         getDataFromLocalSource(isRussian = false, isFavorite = true)
 
     private fun getDataFromLocalSource(isRussian: Boolean, isFavorite: Boolean) {
-        liveDataToObserve.value = AppState.Loading
+//        liveDataToObserve.value = AppState.Loading
+        liveDataToObserve.value = AppStateCity.LoadingCity
         Thread {
             liveDataToObserve.postValue(
-                AppState.Success(
+                // TODO city
+
+//                AppState.Success(
+                AppStateCity.SuccessCity(
                     if (isRussian)
                         if (isFavorite)
-                            cityRepoImpl.getCityRegionFavorite(REGION_RU)
+                        // TODO city
+//                            cityRepoImpl.getCityRegionFavorite(REGION_RU)
+                            cityRepoImpl.getCityRegionFavoriteMain(REGION_RU)
                         else
-                            cityRepoImpl.getCityRegion(REGION_RU)
+//                            cityRepoImpl.getCityRegion(REGION_RU)
+                            cityRepoImpl.getCityRegionMain(REGION_RU)
                     else
                         if (isFavorite)
-                            cityRepoImpl.getCityRegionFavorite(REGION_WORLD)
+//                            cityRepoImpl.getCityRegionFavorite(REGION_WORLD)
+                            cityRepoImpl.getCityRegionFavoriteMain(REGION_WORLD)
                         else
-                            cityRepoImpl.getCityRegion(REGION_WORLD)
+//                            cityRepoImpl.getCityRegion(REGION_WORLD)
+                            cityRepoImpl.getCityRegionMain(REGION_WORLD)
+                    // TODO city
                 )
             )
         }.start()

@@ -38,6 +38,14 @@ class LocalRepoCityImpl(private val localCitySource: HistoryDao) : LocalRepoCity
         return convertCityOfRegionToWeather(citiesOfRegionFavorite)
     }
 
+    override fun getCityRegionMain(region: String): List<City> {
+        return convertCityEntityToView(localCitySource.getCitiesOnRegion(region))
+    }
+
+    override fun getCityRegionFavoriteMain(region: String): List<City> {
+        return convertCityEntityToView(localCitySource.getCitiesRegionFavorite(region))
+    }
+
     override fun getAllCity(): List<City> {
         TODO("Заглушка для добавления города")
     }

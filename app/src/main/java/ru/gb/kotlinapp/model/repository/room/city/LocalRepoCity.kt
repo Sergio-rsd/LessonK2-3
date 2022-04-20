@@ -10,4 +10,6 @@ interface LocalRepoCity {
     fun getCityCondition(city: City): List<City>
     fun getCityRegion(region: String): List<Weather>
     fun getCityRegionFavorite(region: String): List<Weather>
+    fun getCityRegionMain(region: String): List<City>
+    fun getCityRegionFavoriteMain(region: String): List<City>
 }

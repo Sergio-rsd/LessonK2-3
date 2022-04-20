@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.gb.kotlinapp.R
+import ru.gb.kotlinapp.model.City
 import ru.gb.kotlinapp.model.Weather
 import ru.gb.kotlinapp.util.showIf
 
@@ -16,10 +17,14 @@ class MainFragmentAdapter(
 ) : RecyclerView.Adapter<MainFragmentAdapter.MainViewHolder>() {
 
     private var weatherData: List<Weather> = listOf()
+    // TODO city
+    private var cityData: List<City> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setWeather(data: List<Weather>) {
-        weatherData = data
+//    fun setWeather(data: List<Weather>) {
+    fun setWeather(data: List<City>) {
+//        weatherData = data
+        cityData = data
         notifyDataSetChanged()
     }
 
@@ -29,22 +34,29 @@ class MainFragmentAdapter(
 
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(weather: Weather) {
+        // TODO city
+//        fun bind(weather: Weather) {
+        fun bind(city: City) {
             itemView.apply {
+//                findViewById<TextView>(R.id.mainFragmentRecyclerItemTextView).text =
+//                    weather.city.city
                 findViewById<TextView>(R.id.mainFragmentRecyclerItemTextView).text =
-                    weather.city.city
-
-                findViewById<ImageView>(R.id.favoriteIconMain).showIf { weather.city.favorite }
+                    city.city
+//                findViewById<ImageView>(R.id.favoriteIconMain).showIf { weather.city.favorite }
+                findViewById<ImageView>(R.id.favoriteIconMain).showIf { city.favorite }
 
                 setOnClickListener {
-                    onItemViewClickListener?.onItemViewClick(weather)
+//                    onItemViewClickListener?.onItemViewClick(weather)
+                    onItemViewClickListener?.onItemViewClick(city)
                 }
             }
         }
     }
 
     interface OnItemViewClickListener {
-        fun onItemViewClick(weather: Weather)
+        // TODO city
+//        fun onItemViewClick(weather: Weather)
+        fun onItemViewClick(city: City)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
@@ -57,8 +69,11 @@ class MainFragmentAdapter(
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.bind(weatherData[position])
+        // TODO city
+//        holder.bind(weatherData[position])
+        holder.bind(cityData[position])
     }
 
-    override fun getItemCount() = weatherData.size
+//    override fun getItemCount() = weatherData.size
+    override fun getItemCount() = cityData.size
 }

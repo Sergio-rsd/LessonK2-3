@@ -1,7 +1,6 @@
 package ru.gb.kotlinapp
 
 import android.app.Application
-import android.content.SharedPreferences
 import androidx.room.Room
 import ru.gb.kotlinapp.model.room.history.HistoryDao
 import ru.gb.kotlinapp.model.room.history.HistoryDataBase
