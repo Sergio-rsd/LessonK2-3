@@ -1,5 +1,6 @@
 package ru.gb.kotlinapp.util
 
+import androidx.lifecycle.LiveData
 import ru.gb.kotlinapp.model.City
 import ru.gb.kotlinapp.model.Weather
 import ru.gb.kotlinapp.model.WeatherDTO
@@ -76,7 +77,10 @@ fun convertWeatherToEntity(weather: Weather, city: List<CityEntity>): HistoryEnt
 }
 
 fun convertCityEntityToView(entityCity: List<CityEntity>): List<City> {
-    return entityCity.map {
+    // TODO city
+//    return entityCity.map {
+//        City(it.city, it.lat, it.lon, it.favorite, it.note, it.region)
+        return entityCity.map {
         City(it.city, it.lat, it.lon, it.favorite, it.note, it.region)
     }
 }

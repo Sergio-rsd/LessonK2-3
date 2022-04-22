@@ -47,6 +47,7 @@ class MainViewModel(
                     if (isRussian)
                         if (isFavorite)
                         // TODO city
+                            
 //                            cityRepoImpl.getCityRegionFavorite(REGION_RU)
                             cityRepoImpl.getCityRegionFavoriteMain(REGION_RU)
                         else

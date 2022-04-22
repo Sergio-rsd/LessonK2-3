@@ -1,5 +1,7 @@
 package ru.gb.kotlinapp.model.room.history
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import ru.gb.kotlinapp.model.room.city.CityEntity
 import ru.gb.kotlinapp.model.room.city.CityWithHistory
@@ -33,7 +35,9 @@ interface HistoryDao {
     fun updateCity(entity: CityEntity)
 
     @Query("SELECT * FROM CityEntity WHERE region LIKE :region " + "ORDER BY city")
-    fun getCitiesOnRegion(region: String): List<CityEntity>
+    fun getCitiesOnRegion(region: String): MutableLiveData<List<CityEntity>>
+//    fun getCitiesOnRegion(region: String): List<CityEntity>
+    // TODO city
 
     @Query("SELECT * FROM CityEntity WHERE region LIKE :region AND favorite = 1 " + "ORDER BY city")
     fun getCitiesRegionFavorite(region: String): List<CityEntity>
