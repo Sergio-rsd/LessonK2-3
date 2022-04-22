@@ -33,5 +33,6 @@
     <string name="note">Заметка</string>
     <string name="menu_title_favorite">favorite</string>
     <string name="show_loved_city">Показать любимые города</string>
+    <string name="phone">phone</string>
 
 </resources>
