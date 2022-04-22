@@ -34,5 +34,15 @@
     <string name="menu_title_favorite">favorite</string>
     <string name="show_loved_city">Показать любимые города</string>
     <string name="phone">phone</string>
+    <string name="need_permission_tittle">Доступ к контактам</string>
+    <string name="need_permission_message">Лучше предоставить!!!</string>
+    <string name="need_permission_message_again">Теперь разрешения вручную</string>
+    <string name="need_permission_ok">Да</string>
+    <string name="need_permission_no">Нет</string>
+    <string name="home">Домашний</string>
+    <string name="mobile">Мобильный</string>
+    <string name="work">Рабочий</string>
+    <string name="other">Другой</string>
+    <string name="call">Позвонить</string>
 
 </resources>

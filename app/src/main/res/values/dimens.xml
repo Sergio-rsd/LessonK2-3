@@ -20,5 +20,6 @@
     <dimen name="favorite_height_button">36dp</dimen>
     <dimen name="favorite_text_size_button">13sp</dimen>
     <dimen name="favorite_size_main">30dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>
