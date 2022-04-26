@@ -1,11 +1,24 @@
 package ru.gb.kotlinapp.view
 
+import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,11 +33,15 @@ import ru.gb.kotlinapp.view.details.DetailsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.MainViewModel
 import java.io.File
+import java.io.IOException
 
 private const val IS_WORLD_KEY = "IS_WORLD_KEY"
 private const val LIST_OF_TOWNS = "LIST_OF_TOWNS"
 private const val CITY_EXIST = "CITY_EXIST"
 private const val IS_CITY_KEY = "IS_CITY_KEY"
+private const val REQUEST_CODE = 12345
+private const val REFRESH_PERIOD = 60000L
+private const val MINIMAL_DISTANCE = 100f
 
 class MainFragment : Fragment() {
 
@@ -66,6 +83,8 @@ class MainFragment : Fragment() {
 
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
+
+//        binding.mainFragmentFABLocation.setOnClickListener { checkPermission() }
 
         val observer = Observer<AppState> {
             renderData(it)
@@ -129,7 +148,6 @@ class MainFragment : Fragment() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                appState.weatherData
                 binding.mainFragmentLoadingLayout.visibility = View.GONE
                 adapter.setWeather(appState.weatherData)
             }
@@ -168,7 +186,6 @@ class MainFragment : Fragment() {
                 }
             }
 //  скопировать из базы в Entity города после первого запуска после установки
-
             myTreadHandler.handler?.post {
                 val cityList: MutableList<City> = gatherCities()
                 for (city in cityList) {
@@ -223,4 +240,7 @@ class MainFragment : Fragment() {
                 .getBoolean(IS_FAVORITE_STATE, favoriteState)
         }
     }
+
 }
+
+//}
