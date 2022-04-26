@@ -84,7 +84,7 @@ class MainFragment : Fragment() {
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeWeatherDataSet() }
 
-//        binding.mainFragmentFABLocation.setOnClickListener { checkPermission() }
+        binding.mainFragmentFABLocation.setOnClickListener { checkPermission() }
 
         val observer = Observer<AppState> {
             renderData(it)
@@ -238,6 +238,263 @@ class MainFragment : Fragment() {
         return activity?.let {
             it.getSharedPreferences(FAVORITE_STATE, Context.MODE_PRIVATE)
                 .getBoolean(IS_FAVORITE_STATE, favoriteState)
+        }
+    }
+
+    // TODO GeoLocation
+    private val onLocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            Log.d(TAG, "getLocation()  = $location")
+            getAddressAsync(location)
+        }
+
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+            super.onStatusChanged(provider, status, extras)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            super.onProviderDisabled(provider)
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            super.onProviderEnabled(provider)
+        }
+    }
+
+    private fun checkPermission() {
+        val result = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        if (result == PERMISSION_GRANTED) getLocation()
+        else myRequestPermission()
+
+        activity?.let {
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PERMISSION_GRANTED -> {
+                    getLocation()
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+//                    showRationaleDialog()
+                    showRationale()
+                }
+                else -> {
+//                    requestPermission()
+                    myRequestPermission()
+                }
+            }
+        }
+    }
+
+    private fun myRequestPermission() {
+        permissionLoad.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
+
+
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CODE) {
+            when {
+                (grantResults[0] == PackageManager.PERMISSION_GRANTED) -> {
+                    getLocation()
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                    showRationale()
+                }
+                else -> {
+                    showDialog(
+                        getString(R.string.dialog_title_no_gps),
+                        getString(R.string.dialog_message_no_gps)
+                    )
+                }
+            }
+        }
+    }
+    private val permissionLoad = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permitted ->
+        val accessFine = permitted.getValue(Manifest.permission.ACCESS_FINE_LOCATION)
+// TODO
+        when {
+            accessFine -> {
+                getLocation()
+            }
+            !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                showSettings()
+            }
+            else -> {
+                showRationale()
+            }
+        }
+    }
+
+    private fun showRationale() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.dialog_title_no_gps))
+            .setMessage(getString(R.string.need_permission_message))
+            .setPositiveButton(getString(R.string.need_permission_ok)) { _, _ ->
+                myRequestPermission()
+            }
+            .setNegativeButton(getString(R.string.need_permission_no)) { dialog, _ ->
+                dialog.dismiss()
+                requireActivity().finish()
+            }
+            .create()
+            .show()
+    }
+
+    private fun showSettings() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.dialog_title_no_gps))
+            .setMessage(
+                "${getString(R.string.need_permission_message)} \n" +
+                        getString(R.string.need_permission_message_again)
+            )
+            .setPositiveButton(getString(R.string.need_permission_ok)) { _, _ ->
+                openAppSettings()
+            }
+            .setNegativeButton(getString(R.string.need_permission_no)) { dialog, _ ->
+                dialog.dismiss()
+                requireActivity().finish()
+            }
+            .create()
+            .show()
+    }
+
+    private fun openAppSettings() {
+        val appSettingsIntent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.parse("package:${requireActivity().packageName}")
+        )
+        settingsLoad.launch(appSettingsIntent)
+    }
+
+    private val settingsLoad = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { checkPermission() }
+
+    private fun getLocation() {
+        activity?.let { context ->
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                val locationManager =
+                    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+
+                    providerGPS?.let {
+                        locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            REFRESH_PERIOD,
+                            MINIMAL_DISTANCE,
+                            onLocationListener
+                        )
+                    }
+                } else {
+                    val location =
+                        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+                    if (location == null) {
+//                        showSettings()
+                        Log.d(TAG, "getLocation()  = $location")
+                        showDialog(
+                            getString(R.string.dialog_title_gps_turned_off),
+                            getString(R.string.dialog_message_last_location_unknown)
+                        )
+
+                    } else {
+                        Log.d(TAG, "getLocation()  = $location")
+                        getAddressAsync(location)
+                        showDialog( // TODO может showSettings()
+                            getString(R.string.dialog_title_gps_turned_off),
+                            getString(R.string.dialog_message_last_known_location)
+                        )
+                    }
+                }
+            } else {
+                showRationale()
+            }
+        }
+    }
+
+    private fun showDialog(title: String, message: String) {
+        activity?.let {
+            androidx.appcompat.app.AlertDialog.Builder(it)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton(getString(R.string.dialog_button_close)) { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+        }
+    }
+
+    private fun getAddressAsync(location: Location) {
+        Log.d(TAG, "getLocation()  = $location")
+        Thread {
+            try {
+                val geocoder = Geocoder(requireContext())
+                val listAddress = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                binding.mainFragmentFABLocation.post {
+                    showAddressDialog(listAddress[0].getAddressLine(0), location)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }.start()
+    }
+
+    private fun showAddressDialog(address: String, location: Location) {
+        activity?.let {
+            androidx.appcompat.app.AlertDialog.Builder(it)
+                .setTitle(getString(R.string.dialog_address_title))
+                .setMessage(address)
+                .setPositiveButton(getString(R.string.dialog_address_get_weather)) { _, _ ->
+                    openDetailsFragment(
+                        Weather(
+                            City(
+                                address,
+                                location.latitude,
+                                location.longitude,
+                                false,
+                                "",
+                                ""
+                            )
+                        )
+                    )
+                }
+                .setNegativeButton(getString(R.string.dialog_button_close)) { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+        }
+    }
+
+    private fun openDetailsFragment(weather: Weather) {
+        activity?.supportFragmentManager?.apply {
+            beginTransaction()
+                .add(
+                    R.id.container,
+                    DetailsFragment.newInstance(Bundle().apply {
+                        putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
+                    })
+                )
+                .addToBackStack("")
+                .commitAllowingStateLoss()
         }
     }
 
