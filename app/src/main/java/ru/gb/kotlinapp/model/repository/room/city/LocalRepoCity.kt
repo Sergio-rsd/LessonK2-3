@@ -5,6 +5,7 @@ import ru.gb.kotlinapp.model.Weather
 
 interface LocalRepoCity {
     fun saveCity(city: City)
+    fun addCity(city: City)
     fun getAllCity(): List<City>
     fun updateCityCondition(city: City)
     fun getCityCondition(city: City): List<City>

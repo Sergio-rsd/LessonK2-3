@@ -9,10 +9,18 @@ import ru.gb.kotlinapp.util.convertCityToEntity
 import ru.gb.kotlinapp.util.convertCityToEntityInsert
 
 class LocalRepoCityImpl(private val localCitySource: HistoryDao) : LocalRepoCity {
+
     override fun saveCity(city: City) {
         localCitySource.insertCity(
             convertCityToEntityInsert(city)
         )
+    }
+
+    override fun addCity(city: City) {
+        val isCity = localCitySource.findNameCity(city.city)
+        if (isCity == null) {
+            localCitySource.addReplaceCity(convertCityToEntityInsert(city))
+        }
     }
 
     override fun updateCityCondition(city: City) {

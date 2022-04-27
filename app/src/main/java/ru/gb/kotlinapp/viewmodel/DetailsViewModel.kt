@@ -54,13 +54,17 @@ class DetailsViewModel(
         historyRepositoryImpl.saveEntity(weather)
     }
 
+    fun saveCityToRoom(city: City){
+        cityRepositoryImpl.addCity(city)
+    }
+
     fun getWeatherFromRemoteSource(lat: Double, lon: Double) {
-        detailsLiveData.value = AppState.Loading
+//        detailsLiveData.value = AppState.Loading
+        detailsLiveData.postValue(AppState.Loading)
         detailsRepositoryImpl.getWeatherDetailsFromServer(lat, lon, callBack)
     }
 
     override fun clickButtonFavorite(city: City): Boolean {
-
         val cityLocal = stateCityFavoriteNote(city)
         val cityFavoriteClick = cityLocal.favorite
         val cityUpdate = City(

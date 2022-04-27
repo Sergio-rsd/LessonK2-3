@@ -3,20 +3,15 @@ package ru.gb.kotlinapp.view
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.fragment.app.Fragment
@@ -59,14 +54,7 @@ class MainFragment : Fragment() {
 
     private val adapter = MainFragmentAdapter(object : MainFragmentAdapter.OnItemViewClickListener {
         override fun onItemViewClick(weather: Weather) {
-            activity?.supportFragmentManager?.apply {
-                beginTransaction()
-                    .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
-                        putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
-                    }))
-                    .addToBackStack("")
-                    .commitAllowingStateLoss()
-            }
+            toDetailsWeather(weather)
         }
     })
 
@@ -244,7 +232,6 @@ class MainFragment : Fragment() {
     // TODO GeoLocation
     private val onLocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            Log.d(TAG, "getLocation()  = $location")
             getAddressAsync(location)
         }
 
@@ -262,12 +249,6 @@ class MainFragment : Fragment() {
     }
 
     private fun checkPermission() {
-        val result = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        if (result == PERMISSION_GRANTED) getLocation()
-        else myRequestPermission()
 
         activity?.let {
             when {
@@ -278,11 +259,9 @@ class MainFragment : Fragment() {
                     getLocation()
                 }
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-//                    showRationaleDialog()
                     showRationale()
                 }
                 else -> {
-//                    requestPermission()
                     myRequestPermission()
                 }
             }
@@ -290,13 +269,6 @@ class MainFragment : Fragment() {
     }
 
     private fun myRequestPermission() {
-        permissionLoad.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        )
-
-
         requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
     }
 
@@ -322,23 +294,6 @@ class MainFragment : Fragment() {
             }
         }
     }
-    private val permissionLoad = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permitted ->
-        val accessFine = permitted.getValue(Manifest.permission.ACCESS_FINE_LOCATION)
-// TODO
-        when {
-            accessFine -> {
-                getLocation()
-            }
-            !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                showSettings()
-            }
-            else -> {
-                showRationale()
-            }
-        }
-    }
 
     private fun showRationale() {
         AlertDialog.Builder(requireContext())
@@ -354,36 +309,6 @@ class MainFragment : Fragment() {
             .create()
             .show()
     }
-
-    private fun showSettings() {
-        AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.dialog_title_no_gps))
-            .setMessage(
-                "${getString(R.string.need_permission_message)} \n" +
-                        getString(R.string.need_permission_message_again)
-            )
-            .setPositiveButton(getString(R.string.need_permission_ok)) { _, _ ->
-                openAppSettings()
-            }
-            .setNegativeButton(getString(R.string.need_permission_no)) { dialog, _ ->
-                dialog.dismiss()
-                requireActivity().finish()
-            }
-            .create()
-            .show()
-    }
-
-    private fun openAppSettings() {
-        val appSettingsIntent = Intent(
-            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-            Uri.parse("package:${requireActivity().packageName}")
-        )
-        settingsLoad.launch(appSettingsIntent)
-    }
-
-    private val settingsLoad = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { checkPermission() }
 
     private fun getLocation() {
         activity?.let { context ->
@@ -411,15 +336,12 @@ class MainFragment : Fragment() {
                         locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
                     if (location == null) {
-//                        showSettings()
-                        Log.d(TAG, "getLocation()  = $location")
                         showDialog(
                             getString(R.string.dialog_title_gps_turned_off),
                             getString(R.string.dialog_message_last_location_unknown)
                         )
 
                     } else {
-                        Log.d(TAG, "getLocation()  = $location")
                         getAddressAsync(location)
                         showDialog( // TODO может showSettings()
                             getString(R.string.dialog_title_gps_turned_off),
@@ -445,7 +367,6 @@ class MainFragment : Fragment() {
     }
 
     private fun getAddressAsync(location: Location) {
-        Log.d(TAG, "getLocation()  = $location")
         Thread {
             try {
                 val geocoder = Geocoder(requireContext())
@@ -460,23 +381,22 @@ class MainFragment : Fragment() {
     }
 
     private fun showAddressDialog(address: String, location: Location) {
+        // TODO проверка на пустой address???
         activity?.let {
             androidx.appcompat.app.AlertDialog.Builder(it)
                 .setTitle(getString(R.string.dialog_address_title))
                 .setMessage(address)
                 .setPositiveButton(getString(R.string.dialog_address_get_weather)) { _, _ ->
-                    openDetailsFragment(
-                        Weather(
-                            City(
-                                address,
-                                location.latitude,
-                                location.longitude,
-                                false,
-                                "",
-                                ""
-                            )
+                    toDetailsWeather(Weather(
+                        City(
+                            address,
+                            location.latitude,
+                            location.longitude,
+                            false,
+                            "",
+                            "RU"
                         )
-                    )
+                    ))
                 }
                 .setNegativeButton(getString(R.string.dialog_button_close)) { dialog, _ -> dialog.dismiss() }
                 .create()
@@ -485,6 +405,10 @@ class MainFragment : Fragment() {
     }
 
     private fun openDetailsFragment(weather: Weather) {
+        toDetailsWeather(weather)
+    }
+
+    private fun toDetailsWeather(weather: Weather) {
         activity?.supportFragmentManager?.apply {
             beginTransaction()
                 .add(
@@ -497,7 +421,4 @@ class MainFragment : Fragment() {
                 .commitAllowingStateLoss()
         }
     }
-
 }
-
-//}

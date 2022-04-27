@@ -1,6 +1,5 @@
 package ru.gb.kotlinapp.model.room.history
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import ru.gb.kotlinapp.model.room.city.CityEntity
 import ru.gb.kotlinapp.model.room.city.CityWithHistory
@@ -17,6 +16,9 @@ interface HistoryDao {
     @Query("SELECT * FROM CityEntity WHERE city LIKE :city")
     fun getNameCity(city: String): List<CityEntity>
 
+    @Query("SELECT * FROM CityEntity WHERE city LIKE :city")
+    fun findNameCity(city: String): CityEntity?
+
     @Update
     fun update(entity: HistoryEntity)
 
@@ -29,6 +31,9 @@ interface HistoryDao {
     // добавление нового города
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertCity(entity: CityEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addReplaceCity(entity: CityEntity)
 
     @Update
     fun updateCity(entity: CityEntity)

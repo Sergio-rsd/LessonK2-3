@@ -40,6 +40,8 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
         _binding = FragmentWeatherCityBinding.inflate(inflater, container, false)
         return binding.root
     }
+//    private lateinit var localWeather: Weather
+//    private lateinit var weatherBundle: Weather
 
     @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,11 +49,18 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
 
         myTreadHandler.start()
 
-        weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
+//        weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
 
         viewModel.detailsLiveData.observe(viewLifecycleOwner) { renderDataWeather(it) }
 
-        requestWeather()
+        arguments?.let {
+            it.getParcelable<Weather>(BUNDLE_EXTRA)?.let { weather ->
+                weatherBundle = weather
+                viewModel.getWeatherFromRemoteSource(weatherBundle.city.lat, weatherBundle.city.lon)
+            }
+        }
+
+//        requestWeather()
 
     }
 
@@ -100,7 +109,11 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
             cityName.text = city.city
 
             myTreadHandler.handler?.post {
+                viewModel.saveCityToRoom(city)
+
                 val cityState = viewModel.stateCityFavoriteNote(city)
+//                if ()
+                // TODO что вернет SQL если ничего не найдет? Insert?
                 saveCity(cityState, weather)
                 requireActivity().let {
                     Handler(Looper.getMainLooper()).post {
