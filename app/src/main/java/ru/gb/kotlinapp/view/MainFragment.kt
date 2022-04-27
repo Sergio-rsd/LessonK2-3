@@ -372,7 +372,7 @@ class MainFragment : Fragment() {
                 val geocoder = Geocoder(requireContext())
                 val listAddress = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                 binding.mainFragmentFABLocation.post {
-                    showAddressDialog(listAddress[0].getAddressLine(0), location)
+                    showAddressDialog(listAddress[0].locality, location)
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -402,10 +402,6 @@ class MainFragment : Fragment() {
                 .create()
                 .show()
         }
-    }
-
-    private fun openDetailsFragment(weather: Weather) {
-        toDetailsWeather(weather)
     }
 
     private fun toDetailsWeather(weather: Weather) {

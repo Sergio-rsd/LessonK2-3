@@ -112,8 +112,6 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                 viewModel.saveCityToRoom(city)
 
                 val cityState = viewModel.stateCityFavoriteNote(city)
-//                if ()
-                // TODO что вернет SQL если ничего не найдет? Insert?
                 saveCity(cityState, weather)
                 requireActivity().let {
                     Handler(Looper.getMainLooper()).post {
