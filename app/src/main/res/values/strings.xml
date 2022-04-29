@@ -59,4 +59,6 @@
     <string name="button_search_map">Search</string>
     <string name="marker_start">Start</string>
     <string name="search_text">Что ищем</string>
+
+    <string name="dialog_message_no_search_city">Такой город не найден</string>
 </resources>

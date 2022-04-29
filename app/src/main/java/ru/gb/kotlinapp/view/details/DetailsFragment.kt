@@ -14,6 +14,7 @@ import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.FragmentWeatherCityBinding
 import ru.gb.kotlinapp.model.*
 import ru.gb.kotlinapp.util.*
+import ru.gb.kotlinapp.view.maps.GoogleMapsFragment
 import ru.gb.kotlinapp.viewmodel.AppState
 import ru.gb.kotlinapp.viewmodel.DetailsViewModel
 import java.text.SimpleDateFormat
@@ -115,7 +116,6 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                 saveCity(cityState, weather)
                 requireActivity().let {
                     Handler(Looper.getMainLooper()).post {
-//                        saveCity(cityState, weather)
                         if (cityState.favorite) {
                             favoriteIcon.visibility = View.VISIBLE
                         } else {
@@ -177,6 +177,10 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
             }
             headerIcon.load(HEADER_DETAIL_ICON)
 
+            goMap.setOnClickListener {
+                seeMapCity(weatherBundle)
+            }
+
             favoriteButton.setOnClickListener {
 
                 myTreadHandler.handler?.post {
@@ -191,6 +195,20 @@ class DetailsFragment : Fragment(R.layout.main_fragment) {
                 }
             }
 
+        }
+    }
+
+    private fun seeMapCity(weather: Weather) {
+        activity?.supportFragmentManager?.apply {
+            beginTransaction()
+                .add(
+                    R.id.container,
+                    GoogleMapsFragment.newInstance(Bundle().apply {
+                        putParcelable(GoogleMapsFragment.BUNDLE_MAP, weather)
+                    })
+                )
+                .addToBackStack("")
+                .commitAllowingStateLoss()
         }
     }
 

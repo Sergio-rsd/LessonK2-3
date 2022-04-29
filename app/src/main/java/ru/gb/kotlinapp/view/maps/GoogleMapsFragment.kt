@@ -14,6 +14,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.FragmentGoogleMapsMainBinding
+import ru.gb.kotlinapp.model.Weather
 import java.io.IOException
 
 class GoogleMapsFragment : Fragment() {
@@ -24,12 +25,23 @@ class GoogleMapsFragment : Fragment() {
     private lateinit var map: GoogleMap
     private val markers = arrayListOf<Marker>()
 
+    private lateinit var weatherBundle: Weather
+
     private val callback = OnMapReadyCallback { googleMap ->
         map = googleMap
 
-        val moscow = LatLng(55.755826, 37.617299900000035)
-//        googleMap.addMarker(MarkerOptions().position(moscow).title("Marker in Moscow"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(moscow, 4f))
+//        val latitudeCity = weatherBundle.city.lat
+//        val longitudeCity = weatherBundle.city.lon
+
+        val cityCoordination = LatLng(weatherBundle.city.lat, weatherBundle.city.lon)
+
+//        Log.d(TAG, "null() called with: googleMap = ${weatherBundle.city}")
+//        val moscow = LatLng(55.755826, 37.617299900000035)
+
+        googleMap.addMarker(MarkerOptions().position(cityCoordination).title(""))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityCoordination, 7.5f))
+        getAddressAsync(cityCoordination)
+
         googleMap.setOnMapLongClickListener {
             getAddressAsync(it)
             addMarkerOnMap(it)
@@ -73,6 +85,8 @@ class GoogleMapsFragment : Fragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
+        weatherBundle = arguments?.getParcelable(BUNDLE_MAP) ?: Weather()
+
         binding.buttonSearch.setOnClickListener {
             searchPlace()
         }
@@ -84,26 +98,35 @@ class GoogleMapsFragment : Fragment() {
                 val geocoder = Geocoder(requireContext())
                 val listAddress =
                     geocoder.getFromLocationName(binding.searchAddress.text.toString(), 1)
-
-//                Log.d(TAG, "getAddressAsync() called with: location = $location == ${listAddress[0].getAddressLine(0)}")
                 requireActivity().runOnUiThread {
-                    map.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                listAddress[0].latitude,
-                                listAddress[0].longitude
-                            ), 7f
-                        )
-                    )
-                    map.addMarker(
-                        MarkerOptions().position(
-                            LatLng(
-                                listAddress[0].latitude,
-                                listAddress[0].longitude
+                    if (listAddress.isEmpty()) {
+                        activity?.let {
+                            androidx.appcompat.app.AlertDialog.Builder(it)
+                                .setTitle(binding.searchAddress.text.toString())
+                                .setMessage(R.string.dialog_message_no_search_city)
+                                .setNegativeButton(getString(R.string.dialog_button_close)) { dialog, _ -> dialog.dismiss() }
+                                .create()
+                                .show()
+                        }
+                    } else {
+                        map.moveCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                LatLng(
+                                    listAddress[0].latitude,
+                                    listAddress[0].longitude
+                                ), 7f
                             )
-                        ).title("")
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_pin))
-                    )
+                        )
+                        map.addMarker(
+                            MarkerOptions().position(
+                                LatLng(
+                                    listAddress[0].latitude,
+                                    listAddress[0].longitude
+                                )
+                            ).title("")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_pin))
+                        )
+                    }
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -126,7 +149,12 @@ class GoogleMapsFragment : Fragment() {
     }
 
     companion object {
+        const val BUNDLE_MAP = "map"
 
-        fun newInstance() = GoogleMapsFragment()
+        fun newInstance(bundle: Bundle): GoogleMapsFragment {
+            val fragment = GoogleMapsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }
