@@ -10,6 +10,7 @@ import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.MainActivityBinding
 import ru.gb.kotlinapp.util.MainBroadcastReceiver
 import ru.gb.kotlinapp.view.history.HistoryFragment
+import ru.gb.kotlinapp.view.maps.GoogleMapsFragment
 import ru.gb.kotlinapp.view.phone.PhoneFragment
 import ru.gb.kotlinapp.view.setting.SettingFragment
 
@@ -67,6 +68,15 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.apply {
                     beginTransaction()
                         .add(R.id.container, PhoneFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                true
+            }
+            R.id.menu_map -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .add(R.id.container, GoogleMapsFragment())
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }

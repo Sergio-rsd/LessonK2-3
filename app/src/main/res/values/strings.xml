@@ -54,4 +54,9 @@
     <string name="dialog_rationale_title">Доступ к геолокации</string>
     <string name="dialog_address_title">Ваш адрес</string>
     <string name="dialog_address_get_weather">Узнать погоду</string>
+    <string name="map_google">map_google</string>
+    <string name="default_address">Москва, Красная площадь, 1</string>
+    <string name="button_search_map">Search</string>
+    <string name="marker_start">Start</string>
+    <string name="search_text">Что ищем</string>
 </resources>
