@@ -1,8 +1,30 @@
 <resources>
-    <string name="app_name">Android With Kotlin</string>
+    <string name="app_name">Weather</string>
     <string name="temperature_label">Температура</string>
-    <string name="feels_like_label">Ощущается как</string>
-    <string name="city_coordinates">lt/ln: %s, %s"</string>
+    <string name="city_coordinates">lt/ln: %s, %s</string>
+    <string name="time_after_last_update">Обновлено %s %s назад</string>
+    <string name="current_time_data">Сейчас %s</string>
     <string name="error">Error</string>
     <string name="reload">Reload</string>
+    <string name="current_weather">Текущая погода:</string>
+    <string name="current_weather_value">%s°, %s</string>
+    <string name="feels_like_label">Ощущается как:</string>
+    <string name="feels_like_label_value">%s°</string>
+    <string name="precipitation_strength">Количество осадков:</string>
+    <string name="precipitation_strength_value">%s мм/час</string>
+    <string name="pressure_mm">Давление/норма:</string>
+    <string name="pressure_mm_value">%s/%s мм.рт.ст</string>
+    <string name="humidity">Влажность:</string>
+    <string name="humidity_value">%s%c</string>
+    <string name="wind">Ветер:</string>
+    <string name="wind_value">%s м/с, %s</string>
+    <string name="cloudiness">Уровень облачности:</string>
+    <string name="cloudiness_value">%s%c</string>
+    <string name="sun_day">Восход/Закат Солнца:</string>
+    <string name="sun_day_value">%s/%s</string>
+    <string name="longitude_day">Долгота дня:</string>
+    <string name="longitude_day_value">%s</string>
+    <string name="moon">Фаза луны:</string>
+    <string name="yandex_api">https://api.weather.yandex.ru/v2/forecast?lat=${%f}&amp;lon=${%f}</string>
+    <string name="system_text">СИСТЕМНОЕ СООБЩЕНИЕ\nAction:</string>
 </resources>
