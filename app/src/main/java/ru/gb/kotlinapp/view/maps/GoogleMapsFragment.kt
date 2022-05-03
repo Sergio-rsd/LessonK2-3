@@ -14,7 +14,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import ru.gb.kotlinapp.R
 import ru.gb.kotlinapp.databinding.FragmentGoogleMapsMainBinding
+import ru.gb.kotlinapp.model.City
 import ru.gb.kotlinapp.model.Weather
+import ru.gb.kotlinapp.util.REGION_RU
+import ru.gb.kotlinapp.util.REGION_WORLD
+import ru.gb.kotlinapp.view.details.DetailsFragment
 import java.io.IOException
 
 class GoogleMapsFragment : Fragment() {
@@ -30,16 +34,10 @@ class GoogleMapsFragment : Fragment() {
     private val callback = OnMapReadyCallback { googleMap ->
         map = googleMap
 
-//        val latitudeCity = weatherBundle.city.lat
-//        val longitudeCity = weatherBundle.city.lon
-
         val cityCoordination = LatLng(weatherBundle.city.lat, weatherBundle.city.lon)
 
-//        Log.d(TAG, "null() called with: googleMap = ${weatherBundle.city}")
-//        val moscow = LatLng(55.755826, 37.617299900000035)
-
         googleMap.addMarker(MarkerOptions().position(cityCoordination).title(""))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityCoordination, 7.5f))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityCoordination, 8f))
         getAddressAsync(cityCoordination)
 
         googleMap.setOnMapLongClickListener {
@@ -47,8 +45,56 @@ class GoogleMapsFragment : Fragment() {
             addMarkerOnMap(it)
             drawLine()
         }
-
+        googleMap.setOnInfoWindowClickListener {
+            getWeatherCity()
+        }
         googleMap.uiSettings.isZoomControlsEnabled = true
+    }
+
+    private fun getWeatherCity() {
+        val geocoder = Geocoder(requireContext())
+        val listAddress = geocoder.getFromLocationName(binding.searchAddress.text.toString(), 1)
+        val nameCityOnCoordination =
+            geocoder.getFromLocation(listAddress[0].latitude, listAddress[0].longitude, 1)
+
+        var nameCityReal = nameCityOnCoordination[0].locality
+        if (nameCityReal == null) {
+            nameCityReal = binding.searchAddress.text.toString()
+        }
+
+        val country = nameCityOnCoordination[0].countryName
+
+        val region = if (country.equals("Россия")) {
+            REGION_RU
+        } else {
+            REGION_WORLD
+        }
+
+        val weather = Weather(
+            City(
+                nameCityReal,
+                nameCityOnCoordination[0].latitude,
+                nameCityOnCoordination[0].longitude,
+                false,
+                "",
+                region
+            )
+        )
+        toDetailsWeather(weather)
+    }
+
+    private fun toDetailsWeather(weather: Weather) {
+        activity?.supportFragmentManager?.apply {
+            beginTransaction()
+                .add(
+                    R.id.container,
+                    DetailsFragment.newInstance(Bundle().apply {
+                        putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
+                    })
+                )
+                .addToBackStack("")
+                .commitAllowingStateLoss()
+        }
     }
 
     private fun drawLine() {
@@ -114,7 +160,7 @@ class GoogleMapsFragment : Fragment() {
                                 LatLng(
                                     listAddress[0].latitude,
                                     listAddress[0].longitude
-                                ), 7f
+                                ), 9f
                             )
                         )
                         map.addMarker(
@@ -123,8 +169,9 @@ class GoogleMapsFragment : Fragment() {
                                     listAddress[0].latitude,
                                     listAddress[0].longitude
                                 )
-                            ).title("")
+                            )
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_pin))
+                                .title(getString(R.string.info_weather_on_search_city))
                         )
                     }
                 }
