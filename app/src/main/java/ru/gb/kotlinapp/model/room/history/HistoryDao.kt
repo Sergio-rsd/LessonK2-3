@@ -1,0 +1,46 @@
+package ru.gb.kotlinapp.model.room.history
+
+import androidx.room.*
+import ru.gb.kotlinapp.model.room.city.CityEntity
+import ru.gb.kotlinapp.model.room.city.CityWithHistory
+
+@Dao
+interface HistoryDao {
+    @Transaction
+    @Query("SELECT CityEntity.city, HistoryEntity.temperature, HistoryEntity.condition, CityEntity.favorite, CityEntity.note, CityEntity.region " + "FROM HistoryEntity, CityEntity " + "WHERE CityEntity.id == HistoryEntity.city_id")
+    fun all(): List<CityWithHistory>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(entity: HistoryEntity)
+
+    @Query("SELECT * FROM CityEntity WHERE city LIKE :city")
+    fun getNameCity(city: String): List<CityEntity>
+
+    @Query("SELECT * FROM CityEntity WHERE city LIKE :city")
+    fun findNameCity(city: String): CityEntity?
+
+    @Update
+    fun update(entity: HistoryEntity)
+
+    @Delete
+    fun delete(entity: HistoryEntity)
+
+    @Query("DELETE FROM HistoryEntity WHERE id = :id")
+    fun deleteById(id: Long)
+
+    // добавление нового города
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertCity(entity: CityEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addReplaceCity(entity: CityEntity)
+
+    @Update
+    fun updateCity(entity: CityEntity)
+
+    @Query("SELECT * FROM CityEntity WHERE region LIKE :region " + "ORDER BY city")
+    fun getCitiesOnRegion(region: String): List<CityEntity>
+
+    @Query("SELECT * FROM CityEntity WHERE region LIKE :region AND favorite = 1 " + "ORDER BY city")
+    fun getCitiesRegionFavorite(region: String): List<CityEntity>
+}

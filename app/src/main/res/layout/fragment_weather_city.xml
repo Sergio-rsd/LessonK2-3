@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fragmentBackground">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/mainViewWeather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/main_details_weather_margin"
+            android:orientation="vertical"
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="vertical">
+
+            <ImageView
+                android:id="@+id/headerIcon"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/town_header_height"
+                android:scaleType="fitXY" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/cityName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/recycler_item_text_size"
+                    android:textStyle="bold"
+                    tools:text="Москва" />
+                <ImageView
+                    android:id="@+id/favoriteIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="@dimen/recycler_item_padding"
+                    android:src="@drawable/ic_favorite"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/goMap"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="@dimen/recycler_item_padding"
+                    android:src="@drawable/ic_geo_map_city_green"
+                    />
+
+            </LinearLayout>
+            <!--android:src="@drawable/ic_geo_map_city"-->
+            <!--
+
+                        <TextView
+                            android:id="@+id/timeAfterLastUpdate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            tools:text="Обновлено 1 час назад" />
+            -->
+
+            <TextView
+                android:id="@+id/currentTimeData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/recycler_item_padding"
+                android:gravity="center"
+                android:textStyle="bold"
+                tools:text="Сейчас, 16:35, Среда, 9 февраля" />
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/current_weather" />
+
+                <TextView
+                    android:id="@+id/temperatureValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="-1°; снег с дождём" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/feels_like_label" />
+
+                <TextView
+                    android:id="@+id/feelsLikeValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="-3°" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/precipitation_strength" />
+
+                <TextView
+                    android:id="@+id/precipitationStrengthValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="10 мм/час" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/pressure_mm" />
+
+                <TextView
+                    android:id="@+id/pressureMmValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="751/741 мм.рт.ст." />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/humidity" />
+
+                <TextView
+                    android:id="@+id/humidityValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="85%" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/wind" />
+
+                <TextView
+                    android:id="@+id/windValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="7.5 м/с, Ю" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/cloudiness" />
+
+                <TextView
+                    android:id="@+id/cloudinessValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="100%" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/sun_day" />
+
+                <TextView
+                    android:id="@+id/sunDayValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="07:45/17:42" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Dark">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/longitude_day" />
+
+                <TextView
+                    android:id="@+id/longitudeDayValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="09:17" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/LineWeather.Light">
+
+                <TextView
+                    style="@style/NameWeather"
+                    android:text="@string/moon" />
+
+                <TextView
+                    android:id="@+id/moonValue"
+                    style="@style/NameWeather.Right"
+                    tools:text="Убывающая луна" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/favoriteButton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/favorite_height_button"
+                    android:layout_weight="1"
+                    android:text="@string/favorite_text_button"
+                    android:textSize="@dimen/favorite_text_size_button" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lineBackgroundDark"
+                    android:layout_margin="3dp"
+                    android:padding="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/note" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/noteCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:layout_weight="10"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:textSize="15sp"
+                    android:padding="@dimen/main_details_weather_margin"
+                    tools:text="Note"
+                    />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/loadingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/loadingBackground"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progress="5" />
+            </FrameLayout>
+
+            <!--            <include
+                            android:id="@+id/includedLoadingLayout"
+                            layout="@layout/loading_layout" />
+                        -->
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

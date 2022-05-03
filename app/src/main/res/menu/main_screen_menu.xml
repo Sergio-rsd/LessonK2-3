@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_map"
+        android:icon="@android:drawable/ic_dialog_map"
+        app:maxImageSize="23dp"
+        android:title="@string/map_google"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_phone"
+        android:icon="@drawable/ic_contact_phone"
+        android:title="@string/phone"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_history"
+        android:icon="@drawable/ic_history"
+        android:title="@string/menu_title_history"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_favorite"
+        android:icon="@drawable/ic_settings_favorite"
+        android:title="@string/menu_title_favorite"
+        app:showAsAction="always" />
+</menu>
