@@ -128,34 +128,38 @@ class PhoneFragment : Fragment() {
     ) { checkPermissionContactPhone() }
 
     private fun getContacts() {
-        context?.let { context ->
-            val contResolver = context.contentResolver
-            val cursor = contResolver.query(
-                ContactsContract.Contacts.CONTENT_URI,
-                null,
-                null,
-                null,
-                ContactsContract.Contacts.DISPLAY_NAME + " ASC"
-            )
-            cursor?.let { cursor ->
-                for (i in 0 until cursor.count) {
-                    cursor.moveToPosition(i)
-                    val name =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                    val contactId =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
-                    val view = TextView(context).apply {
-                        text = name
-                        textSize = 25f
+        Thread {
+            context?.let { context ->
+                val contResolver = context.contentResolver
+                val cursor = contResolver.query(
+                    ContactsContract.Contacts.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    ContactsContract.Contacts.DISPLAY_NAME + " ASC"
+                )
+                cursor?.let { cursor ->
+                    for (i in 0 until cursor.count) {
+                        cursor.moveToPosition(i)
+                        val name =
+                            cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                        val contactId =
+                            cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
+                        val view = TextView(context).apply {
+                            text = name
+                            textSize = 25f
+                        }
+                        activity?.runOnUiThread {
+                            binding.phoneContactContainer.addView(view)
+                            view.setOnClickListener {
+                                getNumberPhoneOnID(contResolver, contactId)
+                            }
+                        }
                     }
-                    binding.phoneContactContainer.addView(view)
-                    view.setOnClickListener {
-                        getNumberPhoneOnID(contResolver, contactId)
-                    }
+                    cursor.close()
                 }
-                cursor.close()
             }
-        }
+        }.start()
     }
 
     private fun getNumberPhoneOnID(contResolver: ContentResolver, contactId: String) {
